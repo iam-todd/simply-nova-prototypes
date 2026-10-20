@@ -4,7 +4,7 @@ Interactive design prototypes for the rebuild of [simplynovanyc.com](https://sim
 
 Every file here is a single self-contained HTML page — no build step, no dependencies beyond Google Fonts. Open one in a browser and it works.
 
-**▶ Live demo:** https://USERNAME.github.io/simply-nova-prototypes/
+**▶ Live demo:** https://iam-todd.github.io/simply-nova-prototypes/
 
 ---
 

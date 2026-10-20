@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Product page modules — rules preview | Simply Nova</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,700&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+/* ============================================================
+   SIMPLY NOVA — product page module rules (prototype / spec)
+   Token block copied verbatim from simply-nova-product-page.html.
+   Disposable. The rules object at the bottom is the spec.
+   ============================================================ */
+:root {
+  --sn-cream:#F5F0E8; --sn-raised:#FFFFFF; --sn-alt:#D9D1C4;
+  --sn-espresso:#2C2418;
+  --sn-ink-muted:rgba(44,36,24,.65); --sn-ink-faint:rgba(44,36,24,.45);
+  --sn-border:rgba(44,36,24,.12); --sn-rule:rgba(44,36,24,.20);
+  --sn-status-bg:rgba(44,36,24,.08); --sn-status-ink:#4A443C;
+  --sn-btn2-border:rgba(44,36,24,.25);
+  --sn-cream-muted:rgba(245,240,232,.70); --sn-cream-faint:rgba(245,240,232,.45);
+  --sn-border-onink:rgba(245,240,232,.16); --sn-rule-onink:rgba(245,240,232,.28);
+  --sn-well-onink:rgba(245,240,232,.06);
+  --sn-teal:#046049; --sn-teal-onink:#0FBF9A; --sn-teal-tint:#E1F0EC;
+  --sn-clay:#A8442A; --sn-clay-focus:rgba(168,68,42,.35);
+  --sn-clay-tint:#F6E7E2; --sn-clay-ink:#7A2F1D;
+  --sn-hover-ink:var(--sn-clay);
+  --sn-shadow:rgba(44,36,24,.14);
+  --fd:'Barlow Condensed','Arial Narrow',sans-serif;
+  --fb:'DM Sans',system-ui,-apple-system,sans-serif;
+  --fm:'DM Mono',ui-monospace,monospace;
+  --ground:var(--sn-cream); --ink:var(--sn-espresso); --ink-2:var(--sn-ink-muted);
+  --border:var(--sn-border); --rule:var(--sn-rule); --well:var(--sn-status-bg);
+  --link:var(--sn-teal); --btn-on:var(--sn-cream); --head:var(--sn-espresso);
+}
+.on-ink {
+  --ground:var(--sn-espresso); --ink:var(--sn-cream); --ink-2:var(--sn-cream-muted);
+  --border:var(--sn-border-onink); --rule:var(--sn-rule-onink); --well:var(--sn-well-onink);
+  --link:var(--sn-teal-onink); --head:var(--sn-cream);
+  background:var(--ground); color:var(--ink);
+}
+* { box-sizing:border-box; }
+html { background:var(--sn-espresso); }
+body { margin:0; background:var(--ground); color:var(--ink); font-family:var(--fb); font-size:16px; line-height:1.55; }
+h1,h2,h3 { color:var(--head); font-family:var(--fd); font-weight:700; text-transform:uppercase; letter-spacing:.005em; line-height:.95; margin:0; }
+p { margin:0 0 1em; }
+.wrap { width:min(1240px, 94vw); margin:0 auto; }
+:focus-visible { outline:3px solid var(--sn-clay-focus); outline-offset:2px; border-radius:4px; }
+button { font:inherit; color:inherit; }
+.well { background:var(--well); border:1px solid var(--border); border-radius:8px; display:grid; place-content:center; color:var(--ink-2); font-family:var(--fm); font-size:10px; letter-spacing:.1em; text-transform:uppercase; }
+
+/* ---------- header ---------- */
+.top { padding:52px 0 44px; }
+.top h1 { font-size:clamp(44px, 6.4vw, 84px); max-width:12ch; }
+.top p { color:var(--ink-2); max-width:58ch; margin:18px 0 0; font-size:17px; }
+
+/* ---------- controls ---------- */
+.controls { position:sticky; top:0; z-index:20; background:var(--sn-cream); border-bottom:1px solid var(--sn-rule); }
+.controls .wrap { display:flex; flex-wrap:wrap; align-items:flex-end; gap:14px 28px; padding:14px 0; }
+.ctl-k { display:block; font-size:12.5px; color:var(--ink-2); margin:0 0 6px; }
+.seg { display:inline-flex; border:1.5px solid var(--sn-btn2-border); border-radius:8px; overflow:hidden; }
+.seg button { border:0; background:transparent; padding:0 14px; min-height:40px; cursor:pointer; font-size:14px; font-weight:500; white-space:nowrap; transition:background .15s, color .15s; }
+.seg button + button { border-left:1.5px solid var(--sn-btn2-border); }
+.seg button:hover { color:var(--sn-hover-ink); }
+.seg button[aria-pressed="true"] { background:var(--sn-espresso); color:var(--sn-cream); }
+.chk { display:inline-flex; align-items:center; gap:8px; min-height:40px; font-size:14px; cursor:pointer; }
+.chk input { width:18px; height:18px; accent-color:var(--sn-teal); margin:0; }
+.ctl-type[hidden], .chk[hidden] { display:none; }
+
+/* ---------- stage ---------- */
+.stage { background:var(--sn-alt); padding:44px 0 60px; }
+.single { display:grid; grid-template-columns:minmax(0,1fr) 330px; gap:36px; align-items:start; }
+.single[hidden], .matrix-wrap[hidden] { display:none; }
+
+/* the miniature product page */
+.page { position:relative; }
+.page::before { content:""; position:absolute; top:0; bottom:0; left:170px; right:0; background:var(--sn-cream); border-radius:12px; box-shadow:0 22px 44px -28px var(--sn-shadow), 0 0 0 1px var(--sn-border); }
+.slot { position:relative; padding-left:170px; }
+.lab { position:absolute; left:0; top:22px; width:150px; text-align:right; transition:opacity .25s; }
+.lab b { display:block; font-size:13.5px; line-height:1.25; }
+.lab span { display:block; font-family:var(--fm); font-size:11px; color:var(--ink-2); margin-top:3px; }
+.slot.off .lab b { color:var(--sn-ink-faint); }
+.slot.gone .lab { opacity:0; }
+
+.clp { display:grid; grid-template-rows:0fr; transition:grid-template-rows .34s cubic-bezier(.22,.61,.36,1); }
+.clp.open { grid-template-rows:1fr; }
+.clp > .in { overflow:hidden; min-height:0; }
+
+.ghost-line { margin:10px 28px; border:1.5px dashed var(--sn-rule); border-radius:8px; padding:9px 14px; font-size:13.5px; color:var(--ink-2); }
+.ghost-line b { color:var(--ink); font-weight:700; }
+
+/* module minis */
+.mm { padding:26px 30px; border-top:1px solid var(--sn-border); }
+.slot:first-child .mm { border-top:0; }
+.m-h { font-size:26px; margin:0 0 14px; }
+.m-sub { font-size:14px; color:var(--ink-2); margin:-6px 0 14px; max-width:52ch; }
+
+.m-buy { display:grid; grid-template-columns:1fr 1.1fr; gap:24px; align-items:center; }
+.m-buy .well { aspect-ratio:4/3; }
+.m-buy h3 { font-size:40px; }
+.m-buy p { color:var(--ink-2); font-size:14.5px; margin:10px 0 16px; }
+.fakebtn { display:inline-flex; align-items:center; min-height:40px; padding:0 18px; border-radius:8px; background:var(--sn-teal); color:var(--sn-cream); font-weight:700; font-size:14px; }
+
+.m-state { text-align:center; padding:40px 30px; }
+.m-state p { font-family:var(--fd); font-weight:700; text-transform:uppercase; font-size:34px; line-height:.95; margin:0 auto; max-width:16ch; }
+.m-state.ph p { font-family:var(--fb); text-transform:none; font-weight:500; font-size:15px; color:var(--ink-2); max-width:none; }
+
+.scales { display:grid; gap:14px; max-width:460px; }
+.scale { display:grid; grid-template-columns:56px 1fr; align-items:center; gap:12px; font-size:13px; font-weight:700; }
+.track { position:relative; height:6px; border-radius:3px; background:var(--well); }
+.track i { position:absolute; top:50%; width:14px; height:14px; margin:-7px 0 0 -7px; border-radius:50%; background:var(--sn-teal); }
+.ends { display:flex; justify-content:space-between; font-family:var(--fm); font-size:10.5px; color:var(--ink-2); font-weight:400; grid-column:2; margin-top:-8px; }
+.pf-name { font-weight:700; font-size:15px; margin:0 0 12px; }
+
+.m-calc { display:flex; flex-wrap:wrap; align-items:center; gap:18px; }
+.step { display:inline-flex; border:1.5px solid var(--sn-btn2-border); border-radius:8px; }
+.step span { width:36px; height:36px; display:grid; place-content:center; font-weight:700; }
+.step span + span { border-left:1.5px solid var(--sn-btn2-border); }
+.m-calc p { margin:0; font-weight:700; }
+
+.m-cmp { width:100%; border-collapse:collapse; font-size:13px; }
+.m-cmp th, .m-cmp td { text-align:left; padding:7px 10px 7px 0; border-bottom:1px solid var(--sn-border); }
+.m-cmp thead th { font-family:var(--fm); font-weight:500; font-size:11px; color:var(--ink-2); }
+
+.tiles { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.tiles .well { aspect-ratio:1/1; }
+.tiles b { display:block; font-size:13px; margin-top:7px; }
+.tiles small { display:block; font-size:12px; color:var(--ink-2); line-height:1.35; }
+
+.m-rev { display:grid; grid-template-columns:auto 1fr; gap:28px; align-items:center; }
+.score b { display:block; font-family:var(--fd); font-size:54px; line-height:.9; }
+.score span { font-size:12.5px; color:var(--ink-2); }
+.bars { display:grid; gap:10px; max-width:360px; }
+.bar { font-size:13px; }
+.bar div { height:6px; border-radius:3px; background:var(--well); margin-top:4px; }
+.bar div i { display:block; height:100%; border-radius:3px; background:var(--sn-teal); }
+
+.faqs div { display:flex; justify-content:space-between; gap:16px; padding:10px 0; border-bottom:1px solid var(--sn-border); font-size:14.5px; font-weight:700; }
+.faqs div::after { content:"+"; color:var(--ink-2); font-weight:400; }
+
+.m-counter { border-radius:0 0 12px 12px; }
+.m-counter p { font-family:var(--fm); font-size:12px; color:var(--ink-2); margin:0; }
+
+/* ---------- admin panel ---------- */
+.panel { position:sticky; top:96px; background:var(--sn-raised); border-radius:12px; padding:22px 22px 18px; box-shadow:0 0 0 1px var(--sn-border); }
+.panel h3 { font-size:28px; }
+.panel .for { font-family:var(--fm); font-size:12px; color:var(--ink-2); margin:6px 0 2px; }
+.panel .count { font-size:13.5px; margin:0 0 12px; }
+.prow { display:grid; grid-template-columns:20px 1fr; gap:10px; padding:10px 0; border-top:1px solid var(--sn-border); }
+.prow input { width:18px; height:18px; margin:2px 0 0; accent-color:var(--sn-teal); cursor:pointer; }
+.prow input:disabled { cursor:not-allowed; opacity:.55; }
+.prow label { cursor:pointer; }
+.prow .nm { display:block; font-size:14px; font-weight:700; line-height:1.3; }
+.prow .st { display:block; font-size:12.5px; line-height:1.4; margin-top:2px; color:var(--ink-2); }
+.prow .st.on { color:var(--sn-teal); }
+.prow .st.wait { color:var(--sn-clay-ink); }
+.linkbtn { border:0; background:none; padding:0; color:var(--sn-teal); border-bottom:1.5px solid var(--sn-teal); cursor:pointer; font-size:12.5px; }
+.linkbtn:hover { color:var(--sn-hover-ink); border-color:var(--sn-hover-ink); }
+.schema { margin-top:14px; padding-top:14px; border-top:1px solid var(--sn-rule); }
+.schema h4 { margin:0 0 8px; font-size:13.5px; }
+.schema ul { list-style:none; margin:0; padding:0; font-family:var(--fm); font-size:12px; }
+.schema li { padding:3px 0; }
+.schema li span { color:var(--ink-2); }
+.resetall { margin-top:12px; }
+
+/* ---------- side-by-side matrix ---------- */
+.matrix-wrap { overflow-x:auto; }
+.matrix { display:grid; grid-template-columns:170px repeat(4, minmax(170px,1fr)); gap:8px; min-width:880px; }
+.mx-h { background:var(--sn-cream); border-radius:10px 10px 4px 4px; padding:14px; text-align:left; border:0; cursor:pointer; box-shadow:0 0 0 1px var(--sn-border); transition:box-shadow .15s; }
+.mx-h:hover { box-shadow:0 0 0 2px var(--sn-clay); }
+.mx-h b { display:block; font-family:var(--fd); font-size:24px; text-transform:uppercase; line-height:1; }
+.mx-h span { display:block; font-family:var(--fm); font-size:11.5px; color:var(--ink-2); margin-top:6px; }
+.mx-lab { padding:10px 4px 0 0; text-align:right; }
+.mx-lab b { display:block; font-size:13.5px; line-height:1.25; }
+.mx-lab span { display:block; font-family:var(--fm); font-size:11px; color:var(--ink-2); }
+.mx-c { border-radius:6px; padding:10px 12px; font-size:13.5px; line-height:1.35; min-height:48px; }
+.mx-c.on { background:var(--sn-cream); box-shadow:inset 3px 0 0 var(--sn-teal); font-weight:500; }
+.mx-c.off { border:1.5px dashed var(--sn-rule); color:var(--sn-status-ink); font-size:12.5px; }
+.mx-c.ov { box-shadow:inset 3px 0 0 var(--sn-clay); }
+.mx-foot { font-family:var(--fm); font-size:12px; color:var(--ink-2); padding:6px 12px; }
+
+/* ---------- key ---------- */
+.key { padding:44px 0 56px; }
+.key h2 { font-size:32px; margin:0 0 20px; }
+.key-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:28px; }
+.key-grid b { display:block; font-size:15px; margin-bottom:4px; }
+.key-grid p { font-size:14.5px; color:var(--ink-2); margin:0; }
+.key .fine { margin:32px 0 0; font-size:13.5px; color:var(--ink-2); max-width:70ch; }
+
+@media (max-width:1020px) {
+  .single { grid-template-columns:1fr; }
+  .panel { position:static; }
+  .key-grid { grid-template-columns:repeat(2,1fr); }
+}
+@media (max-width:640px) {
+  .controls { position:static; }
+  .ctl-type { width:100%; }
+  #segType { display:grid; grid-template-columns:1fr 1fr; width:100%; }
+  #segType button:nth-child(3) { border-left:0; }
+  #segType button:nth-child(n+3) { border-top:1.5px solid var(--sn-btn2-border); }
+  .page::before { left:0; }
+  .slot { padding-left:0; }
+  .lab { position:static; text-align:left; width:auto; padding:18px 22px 0; }
+  .slot.gone .lab { display:none; }
+  .mm { padding:18px 22px 22px; border-top:0; }
+  .slot + .slot { border-top:1px solid var(--sn-border); }
+  .m-buy, .m-rev { grid-template-columns:1fr; }
+  .tiles { grid-template-columns:repeat(2,1fr); }
+  .ghost-line { margin:8px 22px 16px; }
+  .key-grid { grid-template-columns:1fr; }
+}
+@media (prefers-reduced-motion:reduce) { .clp, .lab { transition:none; } }
+</style>
+</head>
+<body>
+
+<header class="top on-ink">
+  <div class="wrap">
+    <h1>Which modules go on which page</h1>
+    <p>One set of modules, built once. Rules decide what shows on each product page. Switch the page type and watch what drops out. The panel on the right is what you'd see on a product's edit screen.</p>
+  </div>
+</header>
+
+<div class="controls">
+  <div class="wrap">
+    <div class="ctl-type" id="ctlType">
+      <span class="ctl-k">Page type</span>
+      <div class="seg" role="group" aria-label="Page type" id="segType"></div>
+    </div>
+    <div>
+      <span class="ctl-k">View</span>
+      <div class="seg" role="group" aria-label="View" id="segView">
+        <button type="button" data-view="one" aria-pressed="true">One page</button>
+        <button type="button" data-view="all" aria-pressed="false">All four side by side</button>
+      </div>
+    </div>
+    <div>
+      <span class="ctl-k">Data on the site</span>
+      <div class="seg" role="group" aria-label="Data on the site" id="segData">
+        <button type="button" data-d="launch" aria-pressed="true">At launch</button>
+        <button type="button" data-d="later" aria-pressed="false">Six months in</button>
+      </div>
+    </div>
+    <label class="chk" id="ctlHidden"><input type="checkbox" id="showHidden" checked> Show hidden modules</label>
+  </div>
+</div>
+
+<main class="stage">
+  <div class="wrap">
+    <div class="single" id="single">
+      <div class="page" id="page"></div>
+      <aside class="panel" id="panel" aria-label="Modules panel"></aside>
+    </div>
+    <div class="matrix-wrap" id="matrixWrap" hidden>
+      <div class="matrix" id="matrix"></div>
+    </div>
+  </div>
+</main>
+
+<section class="key">
+  <div class="wrap">
+    <h2>The four rules</h2>
+    <div class="key-grid">
+      <div><b>Always</b><p>On every product page. Locked in the panel, so nobody switches it off by accident.</p></div>
+      <div><b>Page type</b><p>The default comes from the page-type column in the catalogue plan. Tick or untick to change it for one product.</p></div>
+      <div><b>Needs data</b><p>Turned on, but it only appears once the content exists. No empty boxes, no "be the first to review".</p></div>
+      <div><b>Hand-picked</b><p>Off unless you choose it for that product. The statement lives here so it stays rare.</p></div>
+    </div>
+    <p class="fine">Module order is fixed and the same on every page; the panel only turns modules on and off. Product names, counts and copy are stand-ins. Schema is built from what actually shows, so a hidden module never leaves markup behind.</p>
+  </div>
+</section>
+
+<script>
+/* ============================================================
+   THE SPEC. Order here is page order.
+   rule: always | type | data | hand
+   types: page types where it defaults on (rule "type")
+   needs: { key, min, noun } — shows only when count ≥ min
+   ============================================================ */
+const MODS = {
+  buy:       { name:'Buy block',          rule:'always', tag:'Always',     schema:[['ProductGroup + Offer','buy block']] },
+  statement: { name:'Statement',          rule:'hand',   tag:'Hand-picked' },
+  profile:   { name:'Taste profile',      rule:'type',   tag:'Page type',  types:['fish','spreads'] },
+  calc:      { name:'Portion calculator', rule:'type',   tag:'Page type',  types:['fish','spreads','bagels'], schema:[['HowTo','portion calculator']] },
+  compare:   { name:'Comparison table',   rule:'type',   tag:'Page type, needs data', types:['fish','spreads'], needs:{key:'compare', min:3, noun:'products to compare'} },
+  lineup:    { name:'Lineup',             rule:'data',   tag:'Needs data', needs:{key:'siblings', min:2, noun:'sibling pages'}, schema:[['isSimilarTo','lineup']] },
+  reviews:   { name:'Reviews',            rule:'data',   tag:'Needs data', needs:{key:'reviews', min:10, noun:'reviews'}, schema:[['AggregateRating + Review','reviews']] },
+  pairs:     { name:'Pairs with',         rule:'always', tag:'Always',     schema:[['isRelatedTo','pairs with']] },
+  faq:       { name:'FAQ',                rule:'data',   tag:'Needs data', needs:{key:'faq', min:3, noun:'questions'}, schema:[['FAQPage','no Google rich result since May 2026']] },
+  counter:   { name:'Counter strip',      rule:'always', tag:'Always',     schema:[['LocalBusiness','shared @id']] },
+};
+const ORDER = Object.keys(MODS);
+
+const PAGES = {
+  fish: {
+    label:'Sliced fish', product:'Smoked salmon', sub:'Nine cures, cut to order by the quarter pound',
+    hero:['statement'],
+    data:{ compare:{launch:9,later:9}, siblings:{launch:6,later:6}, reviews:{launch:0,later:48}, faq:{launch:6,later:8} },
+    c:{
+      statement:'A slice this thin only happens by hand.',
+      profile:{ h:'Where this one sits', name:'Gaspé nova', scales:[['Salt',.45,'Mild','Salty'],['Smoke',.35,'Light','Heavy']] },
+      calc:{ h:'How much do I need?', out:'For six, fish as the main event: 1½ lb salmon, 9 bagels' },
+      compare:{ h:'Nova, lox or gravlax', cols:['Nova','Belly lox','Gravlax'], rows:[['Cure','Brine, cold smoke','Salt only','Salt, sugar, dill'],['Texture','Silky','Dense','Firm']] },
+      lineup:{ h:'The rest of the case', items:['Sable','Sturgeon','Whitefish','Herring'] },
+      reviews:{ score:'4.8', bars:[['Sliced thin enough',.93],['Arrived cold',.88]] },
+      pairs:[['Everything bagel','Holds up to the salt'],['Scallion cream cheese','Cuts the richness'],['Capers','Brine against the fat'],['Red onion','Sharp and clean']],
+      faq:['How much lox per person?','What’s the difference between nova and lox?','How long does it keep?'],
+    }
+  },
+  spreads: {
+    label:'Spreads & salads', product:'Cream cheese', sub:'Plain and flavoured, by the half pound',
+    hero:[],
+    data:{ compare:{launch:2,later:2}, siblings:{launch:5,later:5}, reviews:{launch:0,later:22}, faq:{launch:4,later:5} },
+    c:{
+      profile:{ h:'Where this one sits', name:'Plain', scales:[['Tang',.4,'Mild','Sharp'],['Rich',.7,'Light','Dense']] },
+      calc:{ h:'How much do I need?', out:'For six: ¾ lb covers 9 bagels' },
+      compare:{ h:'Plain or whipped', cols:['Plain','Whipped'], rows:[['Texture','Dense','Airy'],['Best for','Toasted','Fresh']] },
+      lineup:{ h:'The other spreads', items:['Scallion','Vegetable','Lox spread','Whitefish salad'] },
+      reviews:{ score:'4.7', bars:[['Tastes fresh',.9],['Right amount per tub',.82]] },
+      pairs:[['Everything bagel','The default for a reason'],['Gaspé nova','The classic'],['Tomato','Cold against rich'],['Capers','Salt without the fish']],
+      faq:['How much per bagel?','How long does it keep?','Can I freeze it?'],
+    }
+  },
+  bagels: {
+    label:'Bagels & bread', product:'Bagels', sub:'From the morning, by the half dozen',
+    hero:[],
+    data:{ compare:{launch:0,later:0}, siblings:{launch:4,later:4}, reviews:{launch:0,later:31}, faq:{launch:3,later:4} },
+    c:{
+      profile:{ h:'Where this one sits', name:'Everything', scales:[['Crust',.6,'Soft','Crackly'],['Chew',.7,'Light','Dense']] },
+      calc:{ h:'How many bagels?', out:'1½ per person, always. For six: 9.' },
+      compare:{ h:'Which bagel', cols:['Plain','Everything'], rows:[['Goes with','Anything','Fish']] },
+      lineup:{ h:'The rest of the bakery', items:['Challah','Rye','Rugelach','Babka'] },
+      reviews:{ score:'4.9', bars:[['Crust',.94],['Chew',.9]] },
+      pairs:[['Cream cheese','Scallion or plain'],['Gaspé nova','Half a pound per dozen'],['Whitefish salad','Made this morning'],['Butter','For the purists']],
+      faq:['How many per person?','Do they freeze well?','When are they out of the oven?'],
+    }
+  },
+  tins: {
+    label:'Tins & jars', product:'Tinned fish', sub:'Sold by the tin',
+    hero:[],
+    data:{ compare:{launch:0,later:0}, siblings:{launch:8,later:8}, reviews:{launch:0,later:6}, faq:{launch:2,later:4} },
+    c:{
+      profile:{ h:'Where this one sits', name:'Sardines', scales:[['Salt',.6,'Mild','Salty'],['Oil',.7,'Light','Rich']] },
+      calc:{ h:'How much do I need?', out:'One tin serves two as a snack' },
+      compare:{ h:'Which tin', cols:['Sardines','Mackerel'], rows:[['Flavour','Bold','Mild']] },
+      lineup:{ h:'More from the shelf', items:['Sardines','Mackerel','Anchovies','Mussels'] },
+      reviews:{ score:'4.6', bars:[['Worth the price',.8],['Would buy again',.86]] },
+      pairs:[['Rye bread','Something to put it on'],['Butter','Under the fish'],['Lemon','Every time'],['Red onion','Thin and raw']],
+      faq:['Do you ship tins?','How long does a tin keep?','Which one for a first try?'],
+    }
+  },
+};
+const TYPES = Object.keys(PAGES);
+
+const state = { type:'fish', view:'one', data:'launch', showHidden:true, ov:{fish:{},spreads:{},bagels:{},tins:{}} };
+const $ = s => document.querySelector(s);
+const esc = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
+
+/* ---------- the rule engine ---------- */
+function evaluate(t, key) {
+  const m = MODS[key], p = PAGES[t], ov = state.ov[t][key];
+  if (m.rule === 'always') return { on:true, locked:true, setting:true, overridden:false, status:'Always on', short:'' };
+  const def = m.rule === 'hand' ? p.hero.includes(key) : m.rule === 'data' ? true : m.types.includes(t);
+  const overridden = ov !== undefined;
+  const setting = overridden ? ov : def;
+  if (!setting) {
+    const status = overridden ? 'Turned off for this product'
+      : m.rule === 'hand' ? 'Hand-picked. Not picked for this page'
+      : `Off for ${p.label.toLowerCase()} pages`;
+    const short = overridden ? 'Turned off here' : m.rule === 'hand' ? 'Not picked' : 'Off for this type';
+    return { on:false, setting, overridden, status, short };
+  }
+  if (m.needs) {
+    const have = p.data[m.needs.key][state.data];
+    if (have < m.needs.min) return { on:false, setting, overridden, wait:true,
+      status:`On, but waiting: needs ${m.needs.min}+ ${m.needs.noun}, has ${have}`,
+      short:`Needs ${m.needs.min}+ ${m.needs.noun}, has ${have}` };
+    return { on:true, setting, overridden, status: overridden ? `Turned on here. Has ${have} ${m.needs.noun}` : `Showing. Has ${have} ${m.needs.noun}`, short:'' };
+  }
+  return { on:true, setting, overridden, status: overridden ? 'Turned on for this product' : m.rule === 'hand' ? 'Picked for this page' : 'On for this page type', short:'' };
+}
+
+/* ---------- module minis ---------- */
+function mini(key, t) {
+  const p = PAGES[t], c = p.c;
+  switch (key) {
+    case 'buy': return `<div class="mm m-buy"><div class="well">Product photo</div><div><h3>${esc(p.product)}</h3><p>${esc(p.sub)}</p><span class="fakebtn">Add to order</span></div></div>`;
+    case 'statement': return c.statement
+      ? `<div class="mm m-state"><p>${esc(c.statement)}</p></div>`
+      : `<div class="mm m-state ph"><p>One sentence for this page, written when you pick it.</p></div>`;
+    case 'profile': return `<div class="mm"><h2 class="m-h">${c.profile.h}</h2><p class="pf-name">${esc(c.profile.name)}</p><div class="scales">${c.profile.scales.map(([k,v,a,b]) =>
+      `<div class="scale"><span>${k}</span><div class="track"><i style="left:${v*100}%"></i></div><div class="ends"><span>${a}</span><span>${b}</span></div></div>`).join('')}</div></div>`;
+    case 'calc': return `<div class="mm"><h2 class="m-h">${esc(c.calc.h)}</h2><div class="m-calc"><span class="step" aria-hidden="true"><span>−</span><span>6</span><span>+</span></span><p>${esc(c.calc.out)}</p></div></div>`;
+    case 'compare': return `<div class="mm"><h2 class="m-h">${esc(c.compare.h)}</h2><table class="m-cmp"><thead><tr><th></th>${c.compare.cols.map(x=>`<th>${esc(x)}</th>`).join('')}</tr></thead><tbody>${c.compare.rows.map(r=>`<tr><th>${esc(r[0])}</th>${r.slice(1).map(x=>`<td>${esc(x)}</td>`).join('')}</tr>`).join('')}</tbody></table></div>`;
+    case 'lineup': return `<div class="mm"><h2 class="m-h">${esc(c.lineup.h)}</h2><div class="tiles">${c.lineup.items.map(x=>`<div><div class="well">Photo</div><b>${esc(x)}</b></div>`).join('')}</div></div>`;
+    case 'reviews': { const n = p.data.reviews[state.data]; return `<div class="mm"><h2 class="m-h">What people say</h2><div class="m-rev"><div class="score"><b>${c.reviews.score}</b><span>★★★★★ from ${n}</span></div><div class="bars">${c.reviews.bars.map(([k,v])=>`<div class="bar">${esc(k)}<div><i style="width:${v*100}%"></i></div></div>`).join('')}</div></div></div>`; }
+    case 'pairs': return `<div class="mm"><h2 class="m-h">What goes with it</h2><div class="tiles">${c.pairs.map(([n,w])=>`<div><div class="well">Photo</div><b>${esc(n)}</b><small>${esc(w)}</small></div>`).join('')}</div></div>`;
+    case 'faq': return `<div class="mm"><h2 class="m-h">Questions we get</h2><div class="faqs">${c.faq.map(q=>`<div>${esc(q)}</div>`).join('')}</div></div>`;
+    case 'counter': return `<div class="mm m-counter on-ink"><h2 class="m-h">Cut on Metropolitan Avenue</h2><p>754 Metropolitan Avenue, Brooklyn. Open daily, 8:00–5:30</p></div>`;
+  }
+}
+function cellLabel(key, t) {
+  const c = PAGES[t].c;
+  return { buy:PAGES[t].product, statement:c.statement ? c.statement : 'Sentence to write', profile:c.profile.h, calc:c.calc.h,
+    compare:c.compare.h, lineup:c.lineup.h, reviews:'What people say', pairs:'What goes with it', faq:'Questions we get',
+    counter:'Cut on Metropolitan Avenue' }[key];
+}
+
+/* ---------- build once ---------- */
+$('#segType').innerHTML = TYPES.map(t => `<button type="button" data-t="${t}" aria-pressed="${t===state.type}">${esc(PAGES[t].label)}</button>`).join('');
+$('#page').innerHTML = ORDER.map(k => `
+  <div class="slot" data-m="${k}">
+    <div class="lab"><b>${MODS[k].name}</b><span>${MODS[k].tag}</span></div>
+    <div class="clp blk open"><div class="in"></div></div>
+    <div class="clp gh"><div class="in"><div class="ghost-line"></div></div></div>
+  </div>`).join('');
+
+/* ---------- render ---------- */
+function render() {
+  document.querySelectorAll('#segType button').forEach(b => b.setAttribute('aria-pressed', b.dataset.t === state.type));
+  document.querySelectorAll('#segView button').forEach(b => b.setAttribute('aria-pressed', b.dataset.view === state.view));
+  document.querySelectorAll('#segData button').forEach(b => b.setAttribute('aria-pressed', b.dataset.d === state.data));
+  $('#ctlType').hidden = state.view !== 'one';
+  $('#ctlHidden').hidden = state.view !== 'one';
+  $('#single').hidden = state.view !== 'one';
+  $('#matrixWrap').hidden = state.view !== 'all';
+  state.view === 'one' ? renderOne() : renderAll();
+}
+
+function renderOne() {
+  const t = state.type, p = PAGES[t];
+  let showing = 0; const schema = [['BreadcrumbList','every page']];
+  ORDER.forEach(k => {
+    const ev = evaluate(t, k), slot = document.querySelector(`.slot[data-m="${k}"]`);
+    if (ev.on) { showing++; (MODS[k].schema || []).forEach(s => schema.push(s)); }
+    slot.querySelector('.blk .in').innerHTML = mini(k, t);
+    slot.querySelector('.ghost-line').innerHTML = `<b>${MODS[k].name}.</b> ${esc(ev.status)}.`;
+    slot.querySelector('.blk').classList.toggle('open', ev.on);
+    slot.querySelector('.gh').classList.toggle('open', !ev.on && state.showHidden);
+    slot.classList.toggle('off', !ev.on);
+    slot.classList.toggle('gone', !ev.on && !state.showHidden);
+  });
+  const anyOv = Object.keys(state.ov[t]).length > 0;
+  $('#panel').innerHTML = `
+    <h3>Modules</h3>
+    <p class="for">${esc(p.product)}, ${esc(p.label.toLowerCase())}</p>
+    <p class="count">${showing} of ${ORDER.length} showing</p>
+    ${ORDER.map(k => { const ev = evaluate(t, k); const id = 'pc-' + k; return `
+      <div class="prow">
+        <input type="checkbox" id="${id}" data-m="${k}" ${ev.setting ? 'checked' : ''} ${ev.locked ? 'disabled' : ''}>
+        <label for="${id}"><span class="nm">${MODS[k].name}</span>
+          <span class="st ${ev.on ? 'on' : ev.wait ? 'wait' : ''}">${esc(ev.status)}${ev.overridden ? ` <button type="button" class="linkbtn" data-reset="${k}">Reset</button>` : ''}</span></label>
+      </div>`; }).join('')}
+    ${anyOv ? `<button type="button" class="linkbtn resetall" data-resetall="1">Reset all to page-type defaults</button>` : ''}
+    <div class="schema"><h4>Schema this page outputs</h4><ul>${schema.map(([s,n]) => `<li>${esc(s)} <span>${esc(n)}</span></li>`).join('')}</ul></div>`;
+}
+
+function renderAll() {
+  let h = `<div></div>` + TYPES.map(t => {
+    const n = ORDER.filter(k => evaluate(t,k).on).length;
+    return `<button type="button" class="mx-h" data-open="${t}"><b>${esc(PAGES[t].label)}</b><span>${esc(PAGES[t].product)}, ${n} of ${ORDER.length} showing</span></button>`;
+  }).join('');
+  ORDER.forEach(k => {
+    h += `<div class="mx-lab"><b>${MODS[k].name}</b><span>${MODS[k].tag}</span></div>`;
+    TYPES.forEach(t => {
+      const ev = evaluate(t, k);
+      h += ev.on
+        ? `<div class="mx-c on ${ev.overridden ? 'ov' : ''}">${esc(cellLabel(k, t))}</div>`
+        : `<div class="mx-c off">${esc(ev.short)}</div>`;
+    });
+  });
+  $('#matrix').innerHTML = h;
+}
+
+/* ---------- events ---------- */
+$('#segType').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; state.type = b.dataset.t; render(); });
+$('#segView').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; state.view = b.dataset.view; render(); });
+$('#segData').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; state.data = b.dataset.d; render(); });
+$('#showHidden').addEventListener('change', e => { state.showHidden = e.target.checked; render(); });
+$('#matrix').addEventListener('click', e => { const b = e.target.closest('[data-open]'); if (!b) return; state.type = b.dataset.open; state.view = 'one'; render(); window.scrollTo({ top: $('.stage').offsetTop - 70, behavior:'smooth' }); });
+$('#panel').addEventListener('change', e => {
+  const k = e.target.dataset.m; if (!k) return;
+  const t = state.type, m = MODS[k];
+  const def = m.rule === 'hand' ? PAGES[t].hero.includes(k) : m.rule === 'data' ? true : m.types.includes(t);
+  if (e.target.checked === def) delete state.ov[t][k]; else state.ov[t][k] = e.target.checked;
+  render();
+  const again = document.getElementById('pc-' + k); if (again) again.focus();
+});
+$('#panel').addEventListener('click', e => {
+  const r = e.target.closest('[data-reset]'); if (r) { e.preventDefault(); delete state.ov[state.type][r.dataset.reset]; render(); return; }
+  if (e.target.closest('[data-resetall]')) { state.ov[state.type] = {}; render(); }
+});
+
+render();
+</script>
+</body>
+</html>

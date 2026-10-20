@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simply Nova — Web Design Guidelines</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=DM+Mono:wght@400;500&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --sn-cream:#F5F0E8; --sn-raised:#FFFFFF; --sn-alt:#D9D1C4;
+  --sn-espresso:#2C2418;
+  --sn-ink-muted:rgba(44,36,24,.65); --sn-ink-faint:rgba(44,36,24,.45);
+  --sn-border:rgba(44,36,24,.12); --sn-rule:rgba(44,36,24,.20); --sn-status-bg:rgba(44,36,24,.08);
+  --sn-teal:#046049; --sn-teal-onink:#0FBF9A; --sn-teal-tint:#E1F0EC;
+  --sn-status-ink:#4A443C;
+  --sn-clay:#A8442A; --sn-clay-focus:rgba(168,68,42,.35);
+  --sn-clay-tint:#F6E7E2; --sn-clay-ink:#7A2F1D;
+  --fd:'Barlow Condensed','Arial Narrow',sans-serif;
+  --fb:'DM Sans',system-ui,-apple-system,sans-serif;
+  --fm:'DM Mono',ui-monospace,monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--sn-cream);color:var(--sn-espresso);font-family:var(--fb);font-size:16px;line-height:1.55;}
+.wrap{max-width:820px;margin:0 auto;padding:0 22px;}
+h1,h2,h3{font-family:var(--fd);font-weight:700;text-transform:uppercase;letter-spacing:.005em;line-height:.95;margin:0;}
+p{margin:12px 0 0;}
+.eyebrow{font-family:var(--fm);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--sn-ink-muted);margin:0;}
+a{color:var(--sn-teal);text-decoration:none;border-bottom:1.5px solid var(--sn-teal);transition:.15s;}
+a:hover,a:focus-visible{color:var(--sn-clay);border-color:var(--sn-clay);}
+:focus-visible{outline:3px solid var(--sn-clay-focus);outline-offset:2px;border-radius:4px;}
+
+header.top{background:var(--sn-espresso);color:var(--sn-cream);padding:34px 0 30px;}
+header.top h1{font-size:clamp(38px,9vw,62px);color:var(--sn-cream);margin-top:8px;}
+header.top .eyebrow{color:rgba(245,240,232,.5);}
+header.top p{color:rgba(245,240,232,.7);max-width:52ch;font-size:15px;}
+
+section{padding:40px 0 8px;}
+.sec-head{display:flex;align-items:baseline;gap:12px;border-bottom:2px solid var(--sn-espresso);padding-bottom:8px;margin-bottom:8px;}
+.sec-head h2{font-size:clamp(24px,5.5vw,32px);}
+.sec-head .num{font-family:var(--fm);font-size:12px;color:var(--sn-ink-muted);}
+
+h3{font-size:19px;margin-top:30px;}
+.lead{font-size:16.5px;color:var(--sn-ink-muted);}
+
+/* demo surface */
+.demo{background:var(--sn-raised);border:1px solid var(--sn-border);border-radius:12px;padding:20px;margin-top:16px;}
+.demo-label{font-family:var(--fm);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sn-ink-muted);margin:0 0 14px;}
+
+/* do / dont */
+.pair{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:16px;}
+@media(max-width:620px){.pair{grid-template-columns:1fr;}}
+.card{background:var(--sn-raised);border:1px solid var(--sn-border);border-radius:12px;padding:18px;}
+.card.yes{border-top:3px solid var(--sn-teal);}
+.card.no{border-top:3px solid var(--sn-espresso);}
+.card .verdict{font-family:var(--fm);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;margin:0 0 14px;}
+.card.yes .verdict{color:var(--sn-teal);}
+.card.no .verdict{color:var(--sn-ink-muted);}
+.card .why{font-size:13px;color:var(--sn-ink-muted);margin-top:14px;line-height:1.45;}
+
+/* swatch rows */
+.sw{display:flex;gap:13px;align-items:flex-start;padding:15px 0;border-bottom:1px solid var(--sn-border);}
+.sw:last-child{border-bottom:none;}
+.sw .chip{width:40px;height:40px;border-radius:8px;flex:0 0 auto;}
+.sw .nm{font-family:var(--fd);font-size:19px;text-transform:uppercase;margin:0;line-height:1;}
+.sw .hex{font-family:var(--fm);font-size:11.5px;color:var(--sn-ink-muted);margin:3px 0 0;}
+.sw .job{font-size:13.5px;color:var(--sn-ink-muted);margin:6px 0 0;}
+.sw .never{font-family:var(--fm);font-size:11px;color:var(--sn-ink-muted);margin:5px 0 0;}
+
+/* components */
+.btn{background:var(--sn-teal);color:var(--sn-cream);border:none;border-radius:8px;padding:12px 22px;font-family:var(--fb);font-size:14.5px;font-weight:700;cursor:pointer;transition:background .15s;}
+.btn:hover,.btn:focus-visible,.btn:active{background:var(--sn-clay);}
+.btn[disabled]{background:var(--sn-status-bg);color:var(--sn-ink-faint);cursor:not-allowed;}
+.btn[disabled]:hover{background:var(--sn-status-bg);}
+.btn-2{background:transparent;color:var(--sn-espresso);border:1.5px solid rgba(44,36,24,.25);border-radius:8px;padding:11px 21px;font-family:var(--fb);font-size:14.5px;font-weight:500;cursor:pointer;transition:border-color .15s;}
+.btn-2:hover,.btn-2:focus-visible{border-color:var(--sn-espresso);}
+.btn-bad{background:var(--sn-clay);color:var(--sn-cream);border:none;border-radius:8px;padding:12px 22px;font-family:var(--fb);font-size:14.5px;font-weight:700;}
+.btn-bad2{background:var(--sn-teal);color:var(--sn-cream);border:none;border-radius:8px;padding:12px 22px;font-family:var(--fb);font-size:14.5px;font-weight:700;}
+
+.chips{display:inline-flex;border:1.5px solid var(--sn-border);border-radius:8px;overflow:hidden;background:var(--sn-raised);}
+.chips button{border:none;background:transparent;padding:11px 15px;cursor:pointer;font-family:var(--fm);font-size:14px;color:var(--sn-ink-muted);border-right:1px solid var(--sn-border);transition:.15s;}
+.chips button:last-child{border-right:none;}
+.chips button:hover,.chips button:focus-visible{background:var(--sn-clay);color:var(--sn-cream);}
+.chips button[aria-pressed="true"]{background:var(--sn-teal);color:var(--sn-cream);}
+.chips button[aria-pressed="true"]:hover{background:var(--sn-clay);}
+
+.tag{font-family:var(--fm);font-size:11.5px;font-weight:500;background:var(--sn-clay-tint);color:var(--sn-clay-ink);padding:6px 11px;border-radius:4px;text-transform:uppercase;letter-spacing:.08em;}
+.tag.out{background:var(--sn-status-bg);color:var(--sn-status-ink);}
+.tag-bad{font-family:var(--fm);font-size:11.5px;font-weight:500;background:var(--sn-clay);color:var(--sn-cream);padding:6px 11px;border-radius:4px;text-transform:uppercase;letter-spacing:.08em;}
+
+.focusdemo{background:var(--sn-teal);color:var(--sn-cream);border:none;border-radius:8px;padding:12px 22px;font-family:var(--fb);font-weight:700;font-size:14.5px;outline:3px solid var(--sn-clay-focus);outline-offset:2px;}
+
+/* type samples */
+.tsample{padding:14px 0;border-bottom:1px solid var(--sn-border);}
+.tsample:last-child{border-bottom:none;}
+.tsample .role{font-family:var(--fm);font-size:10.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--sn-ink-muted);margin:0 0 6px;}
+
+/* density bar */
+.bar{display:flex;height:36px;border-radius:8px;overflow:hidden;margin-top:16px;border:1px solid var(--sn-border);}
+.bar span{display:flex;align-items:center;justify-content:center;font-family:var(--fm);font-size:10px;letter-spacing:.06em;}
+
+/* checklist */
+ul.check{list-style:none;padding:0;margin:16px 0 0;}
+ul.check li{padding:11px 0 11px 30px;border-bottom:1px solid var(--sn-border);position:relative;font-size:15px;}
+ul.check li:before{content:"";position:absolute;left:0;top:14px;width:15px;height:15px;border:1.5px solid var(--sn-rule);border-radius:3px;}
+
+.qf{margin-top:16px;}
+.qf-item{background:var(--sn-raised);border:1px solid var(--sn-border);border-left:3px solid var(--sn-teal);border-radius:10px;padding:16px 18px;margin-bottom:11px;}
+.qf-rule{font-family:var(--fd);font-size:19px;text-transform:uppercase;margin:0;line-height:1.05;}
+.qf-how{font-family:var(--fm);font-size:12.5px;line-height:1.5;color:var(--sn-espresso);background:var(--sn-status-bg);border-radius:6px;padding:9px 11px;margin:11px 0 0;}
+.qf-why{font-size:14px;line-height:1.55;color:var(--sn-ink-muted);margin:11px 0 0;}
+.qf-code{font-family:var(--fm);font-size:11.5px;background:rgba(44,36,24,.1);padding:1px 5px;border-radius:3px;}
+.callout{background:var(--sn-espresso);color:var(--sn-cream);border-radius:12px;padding:20px;margin-top:20px;}
+.callout .eyebrow{color:rgba(245,240,232,.45);}
+.callout p{color:rgba(245,240,232,.78);font-size:14.5px;}
+.callout strong{color:var(--sn-cream);}
+
+footer{background:var(--sn-espresso);color:rgba(245,240,232,.78);margin-top:50px;padding:28px 0;font-size:13.5px;}
+footer .eyebrow{color:rgba(245,240,232,.4);}
+
+@media(prefers-reduced-motion:reduce){*{transition:none !important;}}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <div class="wrap">
+    <p class="eyebrow">Simply Nova · simplynovanyc.com</p>
+    <h1>Web Design<br>Guidelines</h1>
+    <p>For developers building the site on WordPress / WooCommerce, Kadence theme, and the <span style="font-family:var(--fm);font-size:13px;">snn-*</span> plugin suite. Hover anything on this page — the interaction states are live, not pictures of themselves.</p>
+  </div>
+</header>
+
+<main class="wrap">
+
+<!-- 1 -->
+<section>
+  <div class="sec-head"><span class="num">01</span><h2>Four colors, four jobs</h2></div>
+  <p class="lead">Each color does one thing. If you can't name which of the four a new element uses without thinking about it, its role isn't defined yet — ask, don't guess.</p>
+
+  <div class="demo">
+    <div class="sw">
+      <span class="chip" style="background:var(--sn-cream);border:1px solid var(--sn-border);"></span>
+      <div><p class="nm">Cream — surface</p><p class="hex">#F5F0E8</p>
+      <p class="job">Page ground. White only for cards lifted off it. Bone #D9D1C4 for alternating rows.</p>
+      <p class="never">NEVER: text</p></div>
+    </div>
+    <div class="sw">
+      <span class="chip" style="background:var(--sn-espresso);"></span>
+      <div><p class="nm">Espresso — ink &amp; status</p><p class="hex">#2C2418</p>
+      <p class="job">All type, header, footer, borders, dividers. Also carries the faint tier of status chip (#4A443C ink), for items that are absent.</p>
+      <p class="never">NEVER: anything clickable</p></div>
+    </div>
+    <div class="sw">
+      <span class="chip" style="background:var(--sn-teal);"></span>
+      <div><p class="nm">Teal — rest state</p><p class="hex">#046049 on light · #0FBF9A on dark</p>
+      <p class="job">Buttons, links, selected chips, active nav, announcement bar — sitting still. Two values: #046049 on cream, #0FBF9A on espresso. Never the reverse.</p>
+      <p class="never">NEVER: decoration · #046049 on a dark surface</p></div>
+    </div>
+    <div class="sw">
+      <span class="chip" style="background:var(--sn-clay);"></span>
+      <div><p class="nm">Clay — interaction</p><p class="hex">#A8442A</p>
+      <p class="job">Solid fill: hover, active, focus ring. Pale tint #F6E7E2 with #7A2F1D ink: scarcity chips only.</p>
+      <p class="never">NEVER: solid at rest · tint on anything clickable</p></div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p class="eyebrow">The two hard rules</p>
+    <p><strong>1. Solid clay never appears at rest.</strong> Take a screenshot with the cursor off the page. If there is a solid clay fill in it, that's a bug — not a preference. The pale clay tint is exempt: it marks scarcity and only ever appears as a wash, never as a fill on something you can click.</p>
+    <p><strong>2. Teal never appears on hover.</strong> They swap. They don't coexist on the same element.</p>
+  </div>
+
+  <h3>Clay is scoped by weight, not by role</h3>
+  <p class="lead">Clay does two jobs, and they never look alike. Solid fill is interaction. A pale wash is scarcity. The saturation gap is what keeps them from being confused.</p>
+
+  <div class="pair">
+    <div class="card no">
+      <p class="verdict">Don't</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <span style="font-size:14px;font-weight:500;">Hand-Sliced Nova</span>
+        <span class="tag-bad">Only 4 left</span>
+      </div>
+      <button class="btn" style="width:100%;">Add to ticket</button>
+      <p class="why">Solid clay on a chip. Now it's indistinguishable from a hover state and reads as if something is being touched.</p>
+    </div>
+    <div class="card yes">
+      <p class="verdict">Do</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;">
+        <span style="font-size:14px;font-weight:500;">Hand-Sliced Nova</span>
+        <span class="tag">Only 4 left</span>
+      </div>
+      <button class="btn" style="width:100%;">Add to ticket</button>
+      <p class="why">Tint for scarcity, solid reserved for the hover. Hover the button — the two never sit at the same weight.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p class="eyebrow">Review test</p>
+    <p><strong>Solid clay on a static screenshot is a bug.</strong> <strong>Clay tint on anything clickable is a bug.</strong> Both are checkable without an opinion.</p>
+  </div>
+
+  <h3>Not in the web system</h3>
+  <p class="lead">Gold <span style="font-family:var(--fm);font-size:13.5px;">#C9A96E</span> is print-only — labels and menus, never a web token. Bone <span style="font-family:var(--fm);font-size:13.5px;">#D9D1C4</span> survives only as a cream tint for alternating rows. Neither gets an interactive role.</p>
+
+  <div class="callout">
+    <p class="eyebrow">Print</p>
+    <p>Web hexes don't transfer. Teal prints as <strong>#00AE89, PMS 3278 C</strong> — the web teal goes muddy on stock. Espresso is <strong>PMS Black 4 C</strong>. Pure black is never used in any medium; espresso is the black.</p>
+  </div>
+</section>
+
+<!-- 2 -->
+<section>
+  <div class="sec-head"><span class="num">02</span><h2>Three typefaces</h2></div>
+  <p class="lead">Three faces, three roles. There is no fourth face.</p>
+
+  <div class="demo">
+    <div class="tsample">
+      <p class="role">Display — Barlow Condensed Bold</p>
+      <p style="font-family:var(--fd);font-size:38px;text-transform:uppercase;line-height:.95;margin:0;">Hand-Sliced Nova</p>
+      <p style="font-size:13px;color:var(--sn-ink-muted);margin-top:8px;">Always uppercase. Wordmark, page titles, section heads, product names, prices. Never a sentence longer than about six words.</p>
+    </div>
+    <div class="tsample">
+      <p class="role">Body — DM Sans</p>
+      <p style="font-size:16px;margin:0;">Cold-smoked over applewood, cured eight days in-house. Our house standard — mild, silky, the one to start with.</p>
+      <p style="font-size:13px;color:var(--sn-ink-muted);margin-top:8px;">All running copy, buttons, form labels.</p>
+    </div>
+    <div class="tsample">
+      <p class="role">Utility — DM Mono</p>
+      <p style="font-family:var(--fm);font-size:15px;margin:0;">1/2 LB · $28.00 · SAT 29, 10AM–12PM · #SN-4412</p>
+      <p style="font-size:13px;color:var(--sn-ink-muted);margin-top:8px;">Mono is a signal, not a style. It marks what came from the system rather than the shop — weights, prices, pickup windows, order IDs. Don't set marketing copy in it because it looks technical.</p>
+    </div>
+  </div>
+</section>
+
+<!-- 3 -->
+<section>
+  <div class="sec-head"><span class="num">03</span><h2>Components</h2></div>
+  <p class="lead">Hover each one. These are the real states, not screenshots.</p>
+
+  <h3>Buttons</h3>
+  <div class="demo">
+    <p class="demo-label">Primary · secondary · disabled</p>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;">
+      <button class="btn">Add to ticket</button>
+      <button class="btn-2">Save for later</button>
+      <button class="btn" disabled>Sold out</button>
+    </div>
+  </div>
+
+  <div class="pair">
+    <div class="card no">
+      <p class="verdict">Don't</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn-bad2">Add to ticket</button>
+        <button class="btn-bad2">Save for later</button>
+      </div>
+      <p class="why">Two teal buttons side by side. Nothing is primary when everything is.</p>
+    </div>
+    <div class="card yes">
+      <p class="verdict">Do</p>
+      <div style="display:flex;gap:10px;flex-wrap:wrap;">
+        <button class="btn">Add to ticket</button>
+        <button class="btn-2">Save for later</button>
+      </div>
+      <p class="why">Secondary gets an espresso outline, no fill. That's how teal stays meaningful.</p>
+    </div>
+  </div>
+
+  <h3>Links</h3>
+  <div class="demo">
+    <p class="demo-label">Teal underline at rest, clay on hover</p>
+    <p style="margin:0;">Cured for eight days on <a href="#">Metropolitan Ave</a> and sliced the morning you collect it. <a href="#">See the full counter menu</a>.</p>
+    <p style="font-size:13px;color:var(--sn-ink-muted);margin-top:12px;">Never remove the underline. Underline-on-hover-only fails at this contrast on cream.</p>
+  </div>
+
+  <h3>Selection controls</h3>
+  <div class="demo">
+    <p class="demo-label">Weight chips, pickup slots, filters</p>
+    <div class="chips" role="group" aria-label="Weight">
+      <button aria-pressed="false">1/4 lb</button>
+      <button aria-pressed="true">1/2 lb</button>
+      <button aria-pressed="false">1 lb</button>
+    </div>
+    <p style="font-size:13.5px;color:var(--sn-ink-muted);margin-top:14px;">Unselected: white, hairline border, muted ink. Selected: teal fill. Hover on either: clay. Selected <em>and</em> hovered: clay — teal disappears, per hard rule 2.</p>
+    <p style="font-size:13.5px;color:var(--sn-ink-muted);margin-top:10px;"><strong>No unicode fractions.</strong> Write 1/4 and 1/2 with a slash. The composed glyphs (&frac14;, &frac12;) draw at about half cap height and are unreadable on a phone. Chip type is 14px minimum.</p>
+  </div>
+
+  <h3>Status chips</h3>
+  <div class="demo">
+    <p class="demo-label">Two tiers — act now vs. gone</p>
+    <p style="font-family:var(--fm);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sn-ink-muted);margin:0 0 9px;">Solid — act now</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <span class="tag">Only 4 left</span>
+      <span class="tag">Warm at 7 AM</span>
+      <span class="tag">Last day</span>
+    </div>
+    <p style="font-family:var(--fm);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--sn-ink-muted);margin:20px 0 9px;">Faint — absent</p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
+      <span class="tag out">Sold out</span>
+      <span class="tag out">Back Thursday</span>
+      <span class="tag out">Seasonal</span>
+    </div>
+    <p style="font-size:13.5px;color:var(--sn-ink-muted);margin-top:16px;">Clay tint fill, clay ink, mono at 500. It reads as food rather than as a system alert, which is the point on a shop site.</p>
+    <p style="font-size:13.5px;color:var(--sn-ink-muted);margin-top:10px;">The tier carries the meaning. Scarcity is urgent and gets full weight. <strong>Sold out is not urgent — it's absent</strong>, so it drops to the faint fill. A loud sold-out badge is a loud reason not to buy.</p>
+  </div>
+
+  <div class="pair">
+    <div class="card no">
+      <p class="verdict">Don't</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:14px;font-weight:500;color:var(--sn-ink-muted);">Smoked Sable</span>
+        <span class="tag">Sold out</span>
+      </div>
+      <p class="why">Full weight on an item you can't buy. Shouting about absence.</p>
+    </div>
+    <div class="card yes">
+      <p class="verdict">Do</p>
+      <div style="display:flex;justify-content:space-between;align-items:center;">
+        <span style="font-size:14px;font-weight:500;color:var(--sn-ink-muted);">Smoked Sable</span>
+        <span class="tag out">Sold out</span>
+      </div>
+      <p class="why">Faint tier. The item recedes, and the chips that matter stay loud.</p>
+    </div>
+  </div>
+
+  <h3>Focus</h3>
+  <div class="demo">
+    <p class="demo-label">Every interactive element, no exceptions</p>
+    <button class="focusdemo">Add to ticket</button>
+    <p style="font-size:13.5px;color:var(--sn-ink-muted);margin-top:14px;">3px clay ring at 35%, offset 2px. Never remove an outline without replacing it. Tab through this page to check your own work.</p>
+  </div>
+</section>
+
+<!-- 4 -->
+<section>
+  <div class="sec-head"><span class="num">04</span><h2>Density budget</h2></div>
+  <p class="lead">Rough target per screen. Over budget on teal means too many things are competing to be the call to action.</p>
+
+  <div class="bar">
+    <span style="flex:60;background:var(--sn-cream);color:var(--sn-ink-muted);">CREAM 60%</span>
+    <span style="flex:30;background:var(--sn-espresso);color:var(--sn-cream);">ESPRESSO 30%</span>
+    <span style="flex:8;background:var(--sn-teal);color:var(--sn-cream);">TEAL 8%</span>
+    <span style="flex:2;background:var(--sn-status-bg);color:var(--sn-ink-muted);font-size:9px;">—</span>
+  </div>
+  <p style="font-size:13.5px;color:var(--sn-ink-muted);margin-top:12px;">Clay has no share of this chart. At rest it is 0%. On hover it's one element at a time.</p>
+</section>
+
+<!-- 5 -->
+<section>
+  <div class="sec-head"><span class="num">05</span><h2>Voice</h2></div>
+  <p class="lead">We're an appetizing counter, not a marketplace. The interface uses the shop's vocabulary.</p>
+
+  <div class="pair">
+    <div class="card no">
+      <p class="verdict">Don't</p>
+      <p style="margin:0;font-size:14.5px;">Add To Cart</p>
+      <p style="margin:8px 0 0;font-size:14.5px;">Your cart is currently empty.</p>
+      <p style="margin:8px 0 0;font-size:14.5px;">Sorry! Something went wrong.</p>
+      <p class="why">Title Case, generic e-commerce nouns, an error that apologizes instead of explaining.</p>
+    </div>
+    <div class="card yes">
+      <p class="verdict">Do</p>
+      <p style="margin:0;font-size:14.5px;">Add to ticket</p>
+      <p style="margin:8px 0 0;font-size:14.5px;">Nothing on the ticket yet. Add something from the counter.</p>
+      <p style="margin:8px 0 0;font-size:14.5px;">That pickup window just filled. Pick another below.</p>
+      <p class="why">Sentence case. Ticket, counter, pickup window. Errors say what happened and what to do next.</p>
+    </div>
+  </div>
+
+  <p class="lead" style="margin-top:20px;">An action keeps its name through the whole flow. A button that says "Add to ticket" produces a line on the ticket — not a toast about a cart.</p>
+</section>
+
+<!-- 6 -->
+<section>
+  <div class="sec-head"><span class="num">06</span><h2>WooCommerce &amp; Kadence</h2></div>
+  <p class="lead">This is where the system usually breaks. All four below are defects in review, not preferences.</p>
+
+  <div class="demo">
+    <div class="sw" style="align-items:center;">
+      <span class="chip" style="background:var(--sn-status-bg);"></span>
+      <div><p class="nm" style="font-size:16px;">Woo notices</p>
+      <p class="job">The default info / message / error notices ship in blues and purples that are outside the system entirely. Restyle all three to the status-chip pattern.</p></div>
+    </div>
+    <div class="sw" style="align-items:center;">
+      <span class="chip" style="background:var(--sn-raised);border:1px solid var(--sn-border);"></span>
+      <div><p class="nm" style="font-size:16px;">Kadence white sections</p>
+      <p class="job">Kadence will happily default a section background to white. Cream is the ground everywhere; white is only for raised cards.</p></div>
+    </div>
+    <div class="sw" style="align-items:center;">
+      <span class="chip" style="background:var(--sn-teal);"></span>
+      <div><p class="nm" style="font-size:16px;">Theme-level overrides</p>
+      <p class="job">Override button and link colors at the token level, not per block. A hardcoded hex found in a block or template is a defect.</p></div>
+    </div>
+    <div class="sw" style="align-items:center;">
+      <span class="chip" style="background:var(--sn-espresso);"></span>
+      <div><p class="nm" style="font-size:16px;">Cart vs ticket copy</p>
+      <p class="job">Pickup and local delivery use "Add to ticket." Nationwide shipping keeps standard cart language — different mental model, different words.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 -->
+<section>
+  <div class="sec-head"><span class="num">07</span><h2>Quality floor</h2></div>
+  <p class="lead">Twelve checks, in three groups. Every one is testable in under a minute and answerable yes or no — none of them ask whether something feels right. A PR that fails any of them goes back, regardless of how good it looks.</p>
+
+  <h3>Group A — works for everyone</h3>
+  <p class="lead">These aren't polish. A customer who can't complete an order because of one of these is a customer who calls the shop instead, or doesn't order at all.</p>
+
+  <div class="qf">
+    <div class="qf-item">
+      <p class="qf-rule">Responsive down to 360px</p>
+      <p class="qf-how">How to check — DevTools device toolbar, set width to 360, complete a full order: pick a slot, pick a weight, add two items, open the ticket, remove one.</p>
+      <p class="qf-why">360px is an iPhone SE and a lot of older Androids. Most of your Saturday pickup traffic is someone on a phone, standing up, deciding in about forty seconds. Nothing may overflow horizontally, and the ticket bar must not cover the last product in the list — that's the bug that costs you the order.</p>
+    </div>
+
+    <div class="qf-item">
+      <p class="qf-rule">Touch targets 44&times;44px minimum</p>
+      <p class="qf-how">How to check — DevTools, hover the element, read the box model. Height under 44 fails, even if padding makes it look bigger.</p>
+      <p class="qf-why">Apple's floor for a thumb, and it's generous rather than strict. Weight chips and the ticket's remove button are the two that usually fail — they're small by design and sit next to each other. A mis-tap that removes the wrong line is worse than an ugly button.</p>
+    </div>
+
+    <div class="qf-item">
+      <p class="qf-rule">Every interactive element has a visible focus ring</p>
+      <p class="qf-how">How to check — click the address bar, then press Tab repeatedly through the whole page. If you ever lose track of where you are, it fails.</p>
+      <p class="qf-why">Keyboard and screen-reader users navigate by focus. The most common way this breaks is someone removing an outline to fix a visual nit and not replacing it. If you need to change the ring, change it — never delete it.</p>
+    </div>
+
+    <div class="qf-item">
+      <p class="qf-rule">Body copy meets WCAG AA on cream</p>
+      <p class="qf-how">How to check — DevTools contrast checker on the text color against #F5F0E8. Body needs 4.5:1. Large display type needs 3:1.</p>
+      <p class="qf-why">Espresso on cream clears this at 13.5:1. <strong>Faint ink is for disabled controls only</strong> — 2.2 exempts those, and it fails at 2.65:1 for anything else. Captions, eyebrows, timestamps and unit labels all use muted ink at 4.6:1. Every pair in this system has been audited against both WCAG 2.2 and APCA; if you introduce a new one, audit it before you ship it.</p>
+    </div>
+
+    <div class="qf-item">
+      <p class="qf-rule">Reduced-motion preference disables every transition</p>
+      <p class="qf-how">How to check — macOS System Settings, Accessibility, Display, Reduce Motion. Or emulate it in DevTools rendering. Hover a button; the color should change instantly with no fade.</p>
+      <p class="qf-why">For people with vestibular sensitivity, motion causes actual nausea. The media query is one block at the bottom of the stylesheet, so there's no reason for any new transition to escape it.</p>
+    </div>
+
+    <div class="qf-item">
+      <p class="qf-rule">Fractions written with a slash</p>
+      <p class="qf-how">How to check — search the codebase for the composed glyphs. Any hit is a fail.</p>
+      <p class="qf-why">Composed unicode fractions draw at roughly half cap height. At the 14px our chips use, they're illegible on a phone — which is where almost all of this gets read. Write 1/2, not the glyph. Chip type never goes below 14px.</p>
+    </div>
+  </div>
+
+  <h3>Group B — the system holds</h3>
+  <p class="lead">These catch drift. Each one is the thing that quietly undoes the palette three months from now, when someone is moving fast and the rule isn't in front of them.</p>
+
+  <div class="qf">
+    <div class="qf-item">
+      <p class="qf-rule">No hardcoded hex outside the root token block</p>
+      <p class="qf-how">How to check — grep the diff for a hash followed by three or six hex characters. Anything outside the <span class="qf-code">:root</span> declaration is a fail.</p>
+      <p class="qf-why">This is the single highest-value check here. One hardcoded teal means the next palette change misses a button somewhere, and nobody finds it until a customer does. Kadence blocks and Woo templates are where these hide.</p>
+    </div>
+
+    <div class="qf-item">
+      <p class="qf-rule">Teal is two values, never interchanged</p>
+      <p class="qf-how">How to check — find every teal in the diff. On cream or white it must be #046049. On espresso it must be #0FBF9A.</p>
+      <p class="qf-why">The brand teal #069B7D only clears 3.1:1 on cream — large-text territory, not body. It fails as link text, and it fails as a button fill sitting on the espresso ticket bar. Darkening it for light surfaces and lightening it for dark ones fixes both without changing the hue anyone recognizes. The original #069B7D survives as the print colour and nowhere else on the web.</p>
+    </div>
+
+    <div class="qf-item">
+      <p class="qf-rule">No solid clay at rest</p>
+      <p class="qf-how">How to check — screenshot the page with the cursor moved off it. Zero solid clay fills in the image.</p>
+      <p class="qf-why">Solid clay means "you are touching this." If it's sitting there on load, it's making a promise the element doesn't keep. Note this covers solid fills only — the pale scarcity tint is a different weight and is expected at rest.</p>
+    </div>
+
+    <div class="qf-item">
+      <p class="qf-rule">No clay tint on anything clickable</p>
+      <p class="qf-how">How to check — for each clay-tinted element, try to click it. If it does something, it fails.</p>
+      <p class="qf-why">The other half of the same rule. The tint marks a fact about the product; solid marks a fact about the cursor. Once a tinted thing becomes clickable, the two collapse into each other and neither reads.</p>
+    </div>
+
+    <div class="qf-item">
+      <p class="qf-rule">Scarcity uses the clay tint; absent uses faint espresso</p>
+      <p class="qf-how">How to check — read every chip on the page. "Only 4 left" and "Warm at 7 AM" are tinted. "Sold out" and "Back Thursday" are faint espresso.</p>
+      <p class="qf-why">The tier carries the meaning. Scarcity is urgent — act now. Sold out isn't urgent, it's just absent, and a loud sold-out badge is a loud reason not to buy. When in doubt: can they act on it today?</p>
+    </div>
+
+    <div class="qf-item">
+      <p class="qf-rule">Secondary actions are outlined, never filled</p>
+      <p class="qf-how">How to check — count the filled buttons in any one view. More than one and it fails.</p>
+      <p class="qf-why">Teal is only meaningful because it's scarce. Two filled buttons side by side means neither is primary, and the eye has to do work the design should have done. If two actions genuinely tie for importance, that's a content problem to solve upstream, not a color problem.</p>
+    </div>
+
+    <div class="qf-item">
+      <p class="qf-rule">Only three typefaces on any page</p>
+      <p class="qf-how">How to check — DevTools, Network tab, filter to Font. More than three families loading is a fail.</p>
+      <p class="qf-why">Barlow Condensed, DM Sans, DM Mono. A fourth face usually arrives by accident — a Kadence default, an embedded widget, a plugin shipping its own webfont. It costs load time and it dilutes a look that only works because it's tight.</p>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p class="eyebrow">If you're short on time</p>
+    <p>Run these three first, they catch the most: <strong>grep for hardcoded hex</strong>, <strong>tab through the page</strong>, <strong>complete an order at 360px</strong>. The rest are faster once those pass.</p>
+  </div>
+</section>
+
+<section>
+  <div class="callout">
+    <p class="eyebrow">Open item</p>
+    <p>Weight pricing is linear in the sample — a quarter pound prices at half of a half pound. Most appetizing counters charge a premium on the quarter. <strong>Real break points need to come from Sean before the ordering flow ships.</strong></p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p class="eyebrow">Simply Nova</p>
+    <p style="margin-top:6px;">754 Metropolitan Ave, Williamsburg, Brooklyn · Locked. Changes go through Sean.</p>
+  </div>
+</footer>
+
+</body>
+</html>

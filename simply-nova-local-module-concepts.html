@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simply Nova — local pickup module, three concepts</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;800&family=Bevan&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{--maxw:1160px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);transition:background .25s,color .25s;-webkit-font-smoothing:antialiased;padding-bottom:120px}
+
+body[data-skin="counter"]{
+  --bg:#2c2418;--surface:#3a3123;--ink:#f5f0e8;--ink-soft:#c4b8a4;
+  --accent:#c9a96e;--accent-ink:#2c2418;--line:rgba(245,240,232,.16);
+  --paper:#f5f0e8;--paper-ink:#2c2418;
+  --display:'Bevan',serif;--dtt:none;--dls:.005em;--dlh:1.12;--dfw:400;
+  --util-bg:#1e1810;--util-ink:#c9a96e;
+}
+body[data-skin="handbill"]{
+  --bg:#d9d1c4;--surface:#e6e0d6;--ink:#2c2418;--ink-soft:#6b6152;
+  --accent:#c92a2a;--accent-ink:#fff;--line:rgba(44,36,24,.2);
+  --paper:#fffdf9;--paper-ink:#2c2418;
+  --display:'Barlow Condensed',sans-serif;--dtt:uppercase;--dls:.01em;--dlh:.95;--dfw:800;
+  --util-bg:#2c2418;--util-ink:#d9d1c4;
+}
+body[data-skin="table"]{
+  --bg:#f5f0e8;--surface:#fffdf9;--ink:#2c2418;--ink-soft:#6b6152;
+  --accent:#069b7d;--accent-ink:#fff;--line:rgba(44,36,24,.16);
+  --paper:#fffdf9;--paper-ink:#2c2418;
+  --display:'Fraunces',serif;--dtt:none;--dls:-.01em;--dlh:1.08;--dfw:600;
+  --util-bg:#069b7d;--util-ink:#f5f0e8;
+}
+.dsp{font-family:var(--display);text-transform:var(--dtt);letter-spacing:var(--dls);line-height:var(--dlh);font-weight:var(--dfw)}
+
+/* harness */
+.harness{position:sticky;top:0;z-index:900;background:#16181d;color:#c8ccd4;font-size:12px;padding:9px 16px;display:flex;gap:20px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #2a2e36}
+.harness b{color:#fff;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:10.5px}
+.hgroup{display:flex;gap:6px;align-items:center}
+.hgroup span{opacity:.55;margin-right:3px}
+.harness button{font:inherit;font-size:11.5px;background:#242830;color:#c8ccd4;border:1px solid #343a44;padding:4px 10px;border-radius:5px;cursor:pointer}
+.harness button:hover{border-color:#4d5563}
+.harness button[aria-pressed="true"]{background:#c8ccd4;color:#16181d;border-color:#c8ccd4}
+
+.note{display:none;background:rgba(201,169,110,.1);border-left:3px solid var(--accent);padding:12px 16px;margin:0 auto 6px;max-width:var(--maxw);font-size:13.5px;line-height:1.6;color:var(--ink-soft)}
+.note strong{color:var(--ink);font-weight:600}
+body.notes .note{display:block}
+
+/* utility + header (v2 shell) */
+.util{background:var(--util-bg);color:var(--util-ink);font-size:12.5px;overflow:hidden;height:38px}
+.util-in{max-width:var(--maxw);margin:0 auto;padding:0 20px;height:38px;display:flex;align-items:center;gap:20px}
+.ticker{flex:1;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 20px,#000 92%,transparent)}
+.ticker-track{display:inline-flex;gap:34px;white-space:nowrap;animation:roll 34s linear infinite;padding-left:20px}
+@keyframes roll{to{transform:translateX(-50%)}}
+.ticker b{font-weight:600;letter-spacing:.14em;font-size:10.5px;opacity:.72;margin-right:8px}
+@media(prefers-reduced-motion:reduce){.ticker-track{animation:none}}
+.util .ship{white-space:nowrap;font-weight:500}
+
+header.site{position:sticky;top:36px;z-index:800;background:var(--bg);border-bottom:1px solid var(--line)}
+.hd{max-width:var(--maxw);margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:26px}
+.logo{font-family:var(--display);text-transform:var(--dtt);font-size:26px;letter-spacing:var(--dls);white-space:nowrap}
+body[data-skin="counter"] .logo{font-size:21px}
+body[data-skin="handbill"] .logo{font-size:32px;font-weight:800}
+nav.main{display:flex;gap:24px;flex:1}
+nav.main a{color:var(--ink);text-decoration:none;font-size:14.5px;font-weight:500;padding:6px 0;border-bottom:2px solid transparent}
+nav.main a:hover{border-bottom-color:var(--accent)}
+.seasonal{background:var(--accent);color:var(--accent-ink);text-decoration:none;font-size:13px;font-weight:600;padding:9px 15px;border-radius:3px;white-space:nowrap}
+
+/* hero — the v2 experience moment */
+.hero{max-width:var(--maxw);margin:0 auto;padding:74px 20px 60px}
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:18px}
+h1{font-family:var(--display);text-transform:var(--dtt);letter-spacing:var(--dls);line-height:var(--dlh);font-weight:var(--dfw);font-size:clamp(40px,7vw,76px);max-width:15ch;margin-bottom:22px}
+body[data-skin="counter"] h1{font-size:clamp(32px,5.2vw,56px)}
+.sub{font-size:18px;line-height:1.62;color:var(--ink-soft);max-width:50ch;margin-bottom:26px}
+.heroCta{display:inline-block;background:var(--accent);color:var(--accent-ink);text-decoration:none;font-size:15px;font-weight:600;padding:14px 26px;border-radius:3px}
+
+.band{border-top:1px solid var(--line);padding:60px 20px}
+.band-in{max-width:var(--maxw);margin:0 auto}
+.band h2{font-family:var(--display);text-transform:var(--dtt);letter-spacing:var(--dls);line-height:var(--dlh);font-weight:var(--dfw);font-size:clamp(26px,4vw,42px);margin-bottom:14px;max-width:18ch}
+body[data-skin="counter"] .band h2{font-size:clamp(22px,3vw,32px)}
+.band p{color:var(--ink-soft);max-width:56ch;line-height:1.65;font-size:16px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:34px}
+.three div{border-top:2px solid var(--accent);padding-top:14px}
+.three h3{font-size:14px;font-weight:600;margin-bottom:6px}
+.three p{font-size:13.5px;line-height:1.6}
+footer{border-top:1px solid var(--line);padding:40px 20px;font-size:13.5px;color:var(--ink-soft);line-height:1.8}
+footer .ft{max-width:var(--maxw);margin:0 auto}
+
+/* shared module bits */
+.segm{display:flex;border:1px solid currentColor;border-radius:3px;overflow:hidden;opacity:.9}
+.segm button{background:none;border:none;font:inherit;font-size:12.5px;font-weight:500;color:inherit;padding:6px 13px;cursor:pointer;opacity:.6}
+.segm button[aria-pressed="true"]{background:currentColor;opacity:1}
+.segm button[aria-pressed="true"] span{color:var(--paper);mix-blend-mode:normal}
+.dotg{width:7px;height:7px;border-radius:50%;background:#3fae6b;flex:none}
+
+/* ===== CONCEPT A — counter ticket ===== */
+#cA{position:fixed;left:24px;bottom:24px;z-index:870;width:264px;background:var(--paper);color:var(--paper-ink);border-radius:3px;padding:16px 18px 16px;box-shadow:0 8px 30px rgba(0,0,0,.28);display:none}
+body[data-c="A"][data-geo="local"] #cA{display:block}
+#cA::before{content:"";position:absolute;left:0;right:0;top:-7px;height:8px;background:radial-gradient(circle at 5px 0,transparent 5px,var(--paper) 5.5px);background-size:10px 8px}
+.tk-head{display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px dashed rgba(44,36,24,.3);padding-bottom:9px;margin-bottom:11px}
+.tk-head span{font-size:9.5px;letter-spacing:.18em;text-transform:uppercase;opacity:.6;font-weight:600}
+.tk-num{font-family:var(--display);text-transform:var(--dtt);font-size:30px;line-height:1;font-weight:var(--dfw)}
+.tk-body{font-size:13.5px;line-height:1.5;margin-bottom:13px}
+.tk-body b{font-weight:600}
+#cA .cta{display:block;width:100%;background:var(--accent);color:var(--accent-ink);border:none;font:inherit;font-size:13.5px;font-weight:600;padding:11px;border-radius:3px;cursor:pointer;text-align:center}
+#cA .x{position:absolute;top:9px;right:11px;background:none;border:none;font:inherit;font-size:16px;line-height:1;color:var(--paper-ink);opacity:.4;cursor:pointer}
+
+/* ===== CONCEPT B — scroll-triggered bar ===== */
+#cB{position:fixed;left:0;right:0;bottom:0;z-index:870;background:var(--surface);border-top:2px solid var(--accent);transform:translateY(110%);transition:transform .34s cubic-bezier(.2,.7,.3,1)}
+body[data-c="B"][data-geo="local"] #cB.up{transform:translateY(0)}
+.bar-in{max-width:var(--maxw);margin:0 auto;padding:13px 20px;display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.bar-txt{flex:1;min-width:210px;font-size:14px;line-height:1.45}
+.bar-txt b{font-weight:600}
+.bar-txt em{font-style:normal;display:flex;align-items:center;gap:7px;font-size:12px;color:var(--ink-soft);margin-top:3px}
+#cB .cta{background:var(--accent);color:var(--accent-ink);border:none;font:inherit;font-size:14px;font-weight:600;padding:11px 20px;border-radius:3px;cursor:pointer;white-space:nowrap}
+#cB .x{background:none;border:none;font:inherit;font-size:18px;color:var(--ink-soft);cursor:pointer;padding:4px 6px}
+#cB .segm{color:var(--ink)}
+
+/* ===== CONCEPT C — in-flow band ===== */
+#cC{display:none;background:var(--surface);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+body[data-c="C"][data-geo="local"] #cC{display:block}
+.cc-in{max-width:var(--maxw);margin:0 auto;padding:38px 20px;display:grid;grid-template-columns:1.1fr 1fr;gap:44px;align-items:start}
+.cc-l h2{font-family:var(--display);text-transform:var(--dtt);letter-spacing:var(--dls);line-height:var(--dlh);font-weight:var(--dfw);font-size:clamp(24px,3.4vw,36px);margin-bottom:12px;max-width:16ch}
+body[data-skin="counter"] .cc-l h2{font-size:clamp(20px,2.6vw,27px)}
+.cc-l p{color:var(--ink-soft);font-size:15px;line-height:1.6;max-width:44ch;margin-bottom:18px}
+.cc-actions{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.cc-actions .cta{background:var(--accent);color:var(--accent-ink);border:none;font:inherit;font-size:14.5px;font-weight:600;padding:12px 22px;border-radius:3px;cursor:pointer}
+.cc-l .segm{color:var(--ink)}
+.cc-r{border-left:1px solid var(--line);padding-left:30px}
+.cc-r h3{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--ink-soft);font-weight:600;margin-bottom:14px}
+.mrow{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--line);font-size:14px}
+.mrow:last-child{border:none}
+.mrow em{font-style:normal;color:var(--ink-soft);font-size:12.5px;display:block;margin-top:2px}
+.mrow b{font-weight:600;white-space:nowrap}
+
+@media(max-width:900px){
+  nav.main{display:none}
+  .three,.cc-in{grid-template-columns:1fr}
+  .cc-r{border-left:none;border-top:1px solid var(--line);padding-left:0;padding-top:22px}
+  #cA{left:12px;right:12px;bottom:12px;width:auto}
+  .hero{padding:44px 20px 34px}
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body data-skin="counter" data-c="A" data-geo="local">
+
+<div class="harness">
+  <b>Concepts</b>
+  <div class="hgroup">
+    <button onclick="setC('A',this)" aria-pressed="true">A · Counter ticket</button>
+    <button onclick="setC('B',this)" aria-pressed="false">B · Scroll bar</button>
+    <button onclick="setC('C',this)" aria-pressed="false">C · In-flow band</button>
+    <button onclick="setC('none',this)" aria-pressed="false">Off</button>
+  </div>
+  <div class="hgroup"><span>Skin</span>
+    <button onclick="skin('counter',this)" aria-pressed="true">Counter</button>
+    <button onclick="skin('handbill',this)" aria-pressed="false">Handbill</button>
+    <button onclick="skin('table',this)" aria-pressed="false">Table</button>
+  </div>
+  <div class="hgroup"><span>Visitor</span>
+    <button onclick="geo('local',this)" aria-pressed="true">Local</button>
+    <button onclick="geo('away',this)" aria-pressed="false">Out of town</button>
+  </div>
+  <div class="hgroup">
+    <button onclick="document.body.classList.toggle('notes');this.setAttribute('aria-pressed',document.body.classList.contains('notes'))" aria-pressed="false">Notes</button>
+  </div>
+</div>
+
+<div class="util">
+  <div class="util-in">
+    <div class="ticker"><div class="ticker-track">
+      <span><b>NOW SLICING</b>Eastern Nova, cut this morning</span>
+      <span><b>NOW SLICING</b>Gaspé, first side of the day</span>
+      <span><b>NOW SLICING</b>Sable, hand-carved to order</span>
+      <span><b>NOW SLICING</b>Belly lox, salt-cured</span>
+      <span><b>NOW SLICING</b>Eastern Nova, cut this morning</span>
+      <span><b>NOW SLICING</b>Gaspé, first side of the day</span>
+      <span><b>NOW SLICING</b>Sable, hand-carved to order</span>
+      <span><b>NOW SLICING</b>Belly lox, salt-cured</span>
+    </div></div>
+    <div class="ship">Overnight anywhere in the US</div>
+  </div>
+</div>
+
+<header class="site">
+  <div class="hd">
+    <div class="logo">Simply Nova</div>
+    <nav class="main">
+      <a href="#">Spreads</a>
+      <a href="#">The counter</a>
+      <a href="#">Fish primer</a>
+      <a href="#">Catering</a>
+    </nav>
+    <a class="seasonal" href="#">Ship by Sept 9 for Rosh Hashanah</a>
+  </div>
+</header>
+
+<div class="note"><strong>Shell is approximate.</strong> This is a stand-in for v2 so the modules can be judged in context — same nav, same ticker, same shipping-forward hero. The three concepts are the deliverable; ignore the rest.</div>
+
+<section class="hero">
+  <div class="eyebrow">Brooklyn, since 2019</div>
+  <h1>Cut by hand, packed on ice, at your door tomorrow.</h1>
+  <p class="sub">A side of nova leaves our counter the same way it has for years — sliced to order by someone who can feel when the knife is right. Overnight to any address in the country.</p>
+  <a class="heroCta" href="#">Shop whole sides &amp; boxes</a>
+</section>
+
+<!-- ===== CONCEPT C sits here, in the flow ===== -->
+<section id="cC">
+  <div class="cc-in">
+    <div class="cc-l">
+      <h2>You&rsquo;re close enough to skip the box.</h2>
+      <p>Twelve minutes from most of Williamsburg. Order ahead and it&rsquo;s wrapped and waiting — no line, no number, no waiting on the slicer.</p>
+      <div class="cc-actions">
+        <div class="segm">
+          <button aria-pressed="true" onclick="seg(this)"><span>Pickup</span></button>
+          <button aria-pressed="false" onclick="seg(this)"><span>Delivery</span></button>
+        </div>
+        <button class="cta">Order for pickup</button>
+      </div>
+    </div>
+    <div class="cc-r">
+      <h3>Off the counter this morning</h3>
+      <div class="mrow"><div>Egg &amp; cheese on a roll<em>Until 11am</em></div><b>$8</b></div>
+      <div class="mrow"><div>Light &amp; Truth<em>Nova, scallion cream cheese, tomato</em></div><b>$17</b></div>
+      <div class="mrow"><div>Big Macher<em>Pastrami, slaw, russian</em></div><b>$19</b></div>
+    </div>
+  </div>
+</section>
+
+<div class="note"><strong>C — in-flow band.</strong> Claims a real section directly under the hero, visible only to local visitors. Zero interruption, full brand voice, and it can carry actual menu items with prices — which is the only one of the three with room to sell a specific sandwich. Cost: it does nothing until someone scrolls, and it pushes your shipping content down a screen for a third of your traffic.</div>
+
+<section class="band">
+  <div class="band-in">
+    <h2>Same fish. Three ways to get it.</h2>
+    <p>Eastern Nova is Eastern Nova whether it&rsquo;s on a bagel at nine in the morning, packed on ice to Chicago, or fanned across a platter for twenty.</p>
+    <div class="three">
+      <div><h3>Nova, lox, gravlax</h3><p>Three processes, three textures. Only one is cured in salt alone.</p></div>
+      <div><h3>Belly, center, tail</h3><p>Where on the fish your slice comes from matters more than the smoke.</p></div>
+      <div><h3>Hand-sliced vs. machine</h3><p>Why we still pay someone to stand there with a long knife.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="band-in">
+    <h2>Boxes built for the table you&rsquo;re setting.</h2>
+    <p>The Sunday spread, the shiva platter, the housewarming. Portioned for a real number of people, not a guess.</p>
+  </div>
+</section>
+
+<footer><div class="ft">
+  <b>Simply Nova</b><br>754 Metropolitan Avenue, Brooklyn, NY 11211<br>Tue–Sun 7am–4pm · closed Mondays
+</div></footer>
+
+<!-- ===== CONCEPT A — counter ticket ===== -->
+<aside id="cA">
+  <button class="x" onclick="dismiss('A')" aria-label="Dismiss">×</button>
+  <div class="tk-head"><span>Now serving</span><div class="tk-num">47</div></div>
+  <p class="tk-body"><b>You&rsquo;re a few blocks away.</b> Order ahead and skip the number — ready in about 15 minutes.</p>
+  <button class="cta">Order for pickup</button>
+</aside>
+
+<!-- ===== CONCEPT B — scroll-triggered bar ===== -->
+<aside id="cB">
+  <div class="bar-in">
+    <div class="bar-txt">
+      <b>Ordering for pickup in Williamsburg</b>
+      <em><span class="dotg"></span>Open until 4 · ready in about 15 minutes</em>
+    </div>
+    <div class="segm">
+      <button aria-pressed="true" onclick="seg(this)"><span>Pickup</span></button>
+      <button aria-pressed="false" onclick="seg(this)"><span>Delivery</span></button>
+    </div>
+    <button class="cta">See the counter menu</button>
+    <button class="x" onclick="dismiss('B')" aria-label="Dismiss">×</button>
+  </div>
+</aside>
+
+<div class="note"><strong>A — counter ticket.</strong> Lives in the lower-left corner from the moment a local lands. Styled as the paper stub off the deli number board, so it reads as an object from the shop rather than a widget bolted onto the page. Smallest footprint, never blocks anything, and it&rsquo;s the only concept that reinforces the in-store experience instead of competing with it. Cost: it&rsquo;s small, and small things get ignored.</div>
+
+<div class="note"><strong>B — scroll bar.</strong> Slides up once someone passes the hero, so the brand moment lands clean first. Widest reach and the highest expected conversion of the three, with room for the pickup/delivery toggle inline. Cost: it&rsquo;s the most conventional of the three and reads faintly like a cookie banner — the thing v2 is specifically trying not to feel like.</div>
+
+<script>
+function press(b){var s=b.parentNode.querySelectorAll('button');for(var i=0;i<s.length;i++)s[i].setAttribute('aria-pressed','false');b.setAttribute('aria-pressed','true');}
+function skin(v,b){document.body.dataset.skin=v;press(b);}
+function geo(v,b){document.body.dataset.geo=v;press(b);}
+function setC(v,b){document.body.dataset.c=v;press(b);dismissed={};document.getElementById('cA').style.display='';document.getElementById('cB').classList.remove('up');onScroll();}
+function seg(b){press(b);}
+var dismissed={};
+function dismiss(k){dismissed[k]=true;if(k==='A')document.getElementById('cA').style.display='none';else document.getElementById('cB').classList.remove('up');}
+function onScroll(){
+  if(dismissed.B)return;
+  document.getElementById('cB').classList.toggle('up', scrollY>380);
+}
+addEventListener('scroll',onScroll);
+onScroll();
+</script>
+</body>
+</html>

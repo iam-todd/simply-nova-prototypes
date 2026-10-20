@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simply Nova — homepage v3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;800&family=Bevan&family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,900&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --espresso:#2c2418; --cream:#f5f0e8; --bone:#d9d1c4; --gold:#c9a96e;
+  --teal:#069b7d; --clay:#a8442a; --signal:#c92a2a;
+  --maxw:1160px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:Inter,system-ui,sans-serif;background:var(--bg);color:var(--ink);transition:background .25s,color .25s;-webkit-font-smoothing:antialiased}
+
+/* ---------- SKINS ---------- */
+body[data-skin="counter"]{
+  --bg:#2c2418; --surface:#3a3123; --ink:#f5f0e8; --ink-soft:#c4b8a4;
+  --accent:#c9a96e; --accent-ink:#2c2418; --line:rgba(245,240,232,.16);
+  --display:'Bevan',serif; --display-tt:none; --display-ls:.005em; --display-lh:1.12;
+  --util-bg:#1e1810; --util-ink:#c9a96e;
+}
+body[data-skin="handbill"]{
+  --bg:#d9d1c4; --surface:#e6e0d6; --ink:#2c2418; --ink-soft:#6b6152;
+  --accent:#c92a2a; --accent-ink:#fff; --line:rgba(44,36,24,.2);
+  --display:'Barlow Condensed',sans-serif; --display-tt:uppercase; --display-ls:.01em; --display-lh:.95;
+  --util-bg:#2c2418; --util-ink:#d9d1c4;
+}
+body[data-skin="table"]{
+  --bg:#f5f0e8; --surface:#fffdf9; --ink:#2c2418; --ink-soft:#6b6152;
+  --accent:#069b7d; --accent-ink:#fff; --line:rgba(44,36,24,.16);
+  --display:'Fraunces',serif; --display-tt:none; --display-ls:-.01em; --display-lh:1.08;
+  --util-bg:#069b7d; --util-ink:#f5f0e8;
+}
+.dsp{font-family:var(--display);text-transform:var(--display-tt);letter-spacing:var(--display-ls);line-height:var(--display-lh);font-weight:800}
+body[data-skin="counter"] .dsp{font-weight:400}
+body[data-skin="table"] .dsp{font-weight:600}
+
+/* ---------- DEV HARNESS ---------- */
+.harness{position:sticky;top:0;z-index:900;background:#16181d;color:#c8ccd4;font-size:12px;padding:9px 16px;display:flex;gap:22px;align-items:center;flex-wrap:wrap;border-bottom:1px solid #2a2e36}
+.harness b{color:#fff;font-weight:600;letter-spacing:.06em;text-transform:uppercase;font-size:10.5px}
+.hgroup{display:flex;gap:6px;align-items:center}
+.hgroup span{opacity:.55;margin-right:3px}
+.harness button{font:inherit;font-size:11.5px;background:#242830;color:#c8ccd4;border:1px solid #343a44;padding:4px 10px;border-radius:5px;cursor:pointer}
+.harness button:hover{border-color:#4d5563}
+.harness button[aria-pressed="true"]{background:#c8ccd4;color:#16181d;border-color:#c8ccd4}
+
+/* ---------- NOTES ---------- */
+.note{display:none;background:rgba(201,169,110,.1);border-left:3px solid var(--accent);padding:12px 16px;margin:0 auto 6px;max-width:var(--maxw);font-size:13.5px;line-height:1.6;color:var(--ink-soft)}
+.note strong{color:var(--ink);font-weight:600}
+body.notes .note{display:block}
+
+/* ---------- UTILITY BAR ---------- */
+.util{background:var(--util-bg);color:var(--util-ink);font-size:12.5px;overflow:hidden;transition:height .3s ease;height:38px}
+.util.retracted{height:0}
+.util-in{max-width:var(--maxw);margin:0 auto;padding:0 20px;height:38px;display:flex;align-items:center;gap:20px}
+.status{display:flex;align-items:center;gap:8px;white-space:nowrap;font-weight:500}
+.dot{width:7px;height:7px;border-radius:50%;background:#4ade80;flex:none}
+.dot.closed{background:#f87171}
+.ticker{flex:1;overflow:hidden;position:relative;mask-image:linear-gradient(90deg,transparent,#000 24px,#000 92%,transparent)}
+.ticker-track{display:inline-flex;gap:34px;white-space:nowrap;animation:roll 34s linear infinite;padding-left:24px}
+@keyframes roll{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+.ticker b{font-weight:600;letter-spacing:.14em;font-size:10.5px;opacity:.72;margin-right:8px}
+@media(prefers-reduced-motion:reduce){.ticker-track{animation:none}}
+
+/* ---------- HEADER ---------- */
+header.site{position:sticky;top:36px;z-index:800;background:var(--bg);border-bottom:1px solid var(--line)}
+.hd{max-width:var(--maxw);margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:28px}
+.logo{font-family:var(--display);text-transform:var(--display-tt);font-size:26px;letter-spacing:var(--display-ls);white-space:nowrap}
+body[data-skin="counter"] .logo{font-size:22px}
+body[data-skin="handbill"] .logo{font-size:32px;font-weight:800}
+nav.main{display:flex;gap:26px;flex:1}
+nav.main a{color:var(--ink);text-decoration:none;font-size:14.5px;font-weight:500;padding:6px 0;border-bottom:2px solid transparent}
+nav.main a:hover,nav.main a:focus-visible{border-bottom-color:var(--accent)}
+.seasonal{background:var(--accent);color:var(--accent-ink);text-decoration:none;font-size:13px;font-weight:600;padding:9px 15px;border-radius:3px;white-space:nowrap}
+.cartbtn{background:none;border:1px solid var(--line);color:var(--ink);font:inherit;font-size:13px;padding:8px 13px;border-radius:3px;cursor:pointer;white-space:nowrap;display:flex;gap:7px;align-items:center}
+.cartbtn em{font-style:normal;color:var(--ink-soft);font-size:11.5px;text-transform:uppercase;letter-spacing:.07em}
+
+/* ---------- DELIVERY STRIP ---------- */
+.dstrip{display:none;background:var(--accent);color:var(--accent-ink);font-size:13px}
+.dstrip.on{display:block}
+.dstrip-in{max-width:var(--maxw);margin:0 auto;padding:9px 20px;display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.dstrip button{background:none;border:1px solid currentColor;color:inherit;font:inherit;font-size:12px;padding:3px 10px;border-radius:3px;cursor:pointer;opacity:.85}
+
+/* ---------- HERO ---------- */
+.hero{max-width:var(--maxw);margin:0 auto;padding:64px 20px 44px}
+.eyebrow{font-size:11px;letter-spacing:.22em;text-transform:uppercase;color:var(--ink-soft);margin-bottom:18px}
+h1{font-family:var(--display);text-transform:var(--display-tt);letter-spacing:var(--display-ls);line-height:var(--display-lh);font-size:clamp(40px,7vw,74px);max-width:15ch;margin-bottom:20px;font-weight:800}
+body[data-skin="counter"] h1{font-weight:400;font-size:clamp(34px,5.4vw,58px)}
+body[data-skin="table"] h1{font-weight:900}
+.sub{font-size:18px;line-height:1.62;color:var(--ink-soft);max-width:52ch}
+
+/* ---------- THREE DOORS ---------- */
+.doors{max-width:var(--maxw);margin:0 auto;padding:8px 20px 60px;display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.door{background:var(--surface);border:1px solid var(--line);border-radius:4px;padding:24px;display:flex;flex-direction:column;gap:14px;position:relative}
+.door.lead{border-color:var(--accent);border-width:2px;padding:23px}
+.door.muted{opacity:.62}
+.door.muted:hover{opacity:1}
+.door-tag{position:absolute;top:-9px;left:20px;background:var(--accent);color:var(--accent-ink);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;padding:3px 9px;border-radius:2px;font-weight:600}
+.door h2{font-family:var(--display);text-transform:var(--display-tt);letter-spacing:var(--display-ls);line-height:var(--display-lh);font-size:27px;font-weight:800}
+body[data-skin="counter"] .door h2{font-weight:400;font-size:21px}
+body[data-skin="table"] .door h2{font-weight:600}
+.qual{font-size:13px;color:var(--ink-soft);display:flex;flex-direction:column;gap:5px}
+.qual li{list-style:none;display:flex;gap:8px}
+.qual li::before{content:"—";opacity:.5;flex:none}
+.door-cta{margin-top:auto;background:var(--accent);color:var(--accent-ink);border:none;font:inherit;font-size:14px;font-weight:600;padding:12px;border-radius:3px;cursor:pointer;text-align:center}
+.door-cta.ghost{background:none;color:var(--ink);border:1px solid var(--line);font-weight:500}
+
+/* toggle inside local door */
+.seg{display:flex;border:1px solid var(--line);border-radius:3px;overflow:hidden}
+.seg button{flex:1;background:none;border:none;font:inherit;font-size:13px;font-weight:500;color:var(--ink-soft);padding:9px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--ink);color:var(--bg)}
+.zipline{display:flex;gap:7px}
+.zipline input{flex:1;font:inherit;font-size:13px;padding:9px 11px;border:1px solid var(--line);border-radius:3px;background:var(--bg);color:var(--ink);min-width:0}
+.zipline button{background:var(--ink);color:var(--bg);border:none;font:inherit;font-size:13px;padding:9px 14px;border-radius:3px;cursor:pointer}
+.zipmsg{font-size:12.5px;line-height:1.5;display:none}
+.zipmsg.on{display:block}
+.zipmsg.bad{color:var(--clay)}
+body[data-skin="handbill"] .zipmsg.bad{color:var(--signal)}
+
+/* morning strip */
+.morning{display:none;border:1px dashed var(--accent);border-radius:3px;padding:11px 13px;font-size:13px;line-height:1.5}
+body.am .morning{display:block}
+.morning b{font-weight:600}
+
+/* ---------- PRIMER ---------- */
+.primer{border-top:1px solid var(--line);background:var(--surface)}
+.primer-in{max-width:var(--maxw);margin:0 auto;padding:58px 20px}
+.primer h2{font-family:var(--display);text-transform:var(--display-tt);letter-spacing:var(--display-ls);line-height:var(--display-lh);font-size:clamp(28px,4vw,44px);max-width:18ch;margin-bottom:14px;font-weight:800}
+body[data-skin="counter"] .primer h2{font-weight:400;font-size:clamp(24px,3.2vw,34px)}
+.primer p{color:var(--ink-soft);max-width:56ch;line-height:1.65;font-size:16px}
+.three{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:34px}
+.three div{border-top:2px solid var(--accent);padding-top:14px}
+.three h3{font-size:14px;font-weight:600;margin-bottom:6px}
+.three p{font-size:13.5px;line-height:1.6}
+
+/* ---------- FOOTER ---------- */
+footer{border-top:1px solid var(--line);padding:40px 20px 96px}
+.ft{max-width:var(--maxw);margin:0 auto;font-size:13.5px;color:var(--ink-soft);line-height:1.8}
+.ft b{color:var(--ink);font-weight:600}
+.todo{color:var(--clay);border-bottom:1px dotted currentColor}
+body[data-skin="handbill"] .todo{color:var(--signal)}
+
+/* ---------- MOBILE BAR ---------- */
+.mbar{display:none;position:fixed;bottom:0;left:0;right:0;z-index:850;background:var(--surface);border-top:1px solid var(--line);padding:7px 4px calc(7px + env(safe-area-inset-bottom))}
+.mbar-in{display:flex}
+.mbar button{flex:1;background:none;border:none;font:inherit;color:var(--ink-soft);font-size:10.5px;padding:5px 2px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:4px}
+.mbar button[aria-pressed="true"]{color:var(--accent);font-weight:600}
+.mbar i{width:17px;height:17px;border:1.5px solid currentColor;border-radius:3px;display:block}
+
+@media(max-width:900px){
+  .doors,.three{grid-template-columns:1fr}
+  nav.main{display:none}
+  .mbar{display:block}
+  header.site{top:0}
+  .util{display:none}
+  .hero{padding:40px 20px 30px}
+}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+</style>
+</head>
+<body data-skin="counter" class="am">
+
+<div class="harness">
+  <b>Prototype controls</b>
+  <div class="hgroup"><span>Skin</span>
+    <button onclick="skin('counter',this)" aria-pressed="true">Counter</button>
+    <button onclick="skin('handbill',this)" aria-pressed="false">Handbill</button>
+    <button onclick="skin('table',this)" aria-pressed="false">Table</button>
+  </div>
+  <div class="hgroup"><span>Visitor</span>
+    <button onclick="geo('zone',this)" aria-pressed="true">In delivery zone</button>
+    <button onclick="geo('nyc',this)" aria-pressed="false">NYC, outside zone</button>
+    <button onclick="geo('away',this)" aria-pressed="false">Out of town</button>
+  </div>
+  <div class="hgroup"><span>Time</span>
+    <button onclick="clock(true,this)" aria-pressed="true">Before 11am</button>
+    <button onclick="clock(false,this)" aria-pressed="false">Afternoon</button>
+  </div>
+  <div class="hgroup">
+    <button onclick="document.body.classList.toggle('notes');this.setAttribute('aria-pressed',document.body.classList.contains('notes'))" aria-pressed="false">Notes</button>
+  </div>
+</div>
+
+<div class="util" id="util">
+  <div class="util-in">
+    <div class="status"><span class="dot" id="dot"></span><span id="statusText">Open until 4 · kitchen closes 3:30</span></div>
+    <div class="ticker"><div class="ticker-track">
+      <span><b>NOW SLICING</b>Eastern Nova, cut this morning</span>
+      <span><b>NOW SLICING</b>Gaspé, first side of the day</span>
+      <span><b>NOW SLICING</b>Sable, hand-carved to order</span>
+      <span><b>NOW SLICING</b>Belly lox, salt-cured</span>
+      <span><b>NOW SLICING</b>Eastern Nova, cut this morning</span>
+      <span><b>NOW SLICING</b>Gaspé, first side of the day</span>
+      <span><b>NOW SLICING</b>Sable, hand-carved to order</span>
+      <span><b>NOW SLICING</b>Belly lox, salt-cured</span>
+    </div></div>
+  </div>
+</div>
+
+<header class="site">
+  <div class="hd">
+    <div class="logo">Simply Nova</div>
+    <nav class="main">
+      <a href="#">Order pickup</a>
+      <a href="#">Ship nationwide</a>
+      <a href="#">Catering</a>
+      <a href="#">Fish primer</a>
+    </nav>
+    <a class="seasonal" href="#">Ship by Sept 9 for Rosh Hashanah</a>
+    <button class="cartbtn" id="cart"><em>Pickup</em> 0</button>
+  </div>
+</header>
+
+<div class="dstrip" id="dstrip">
+  <div class="dstrip-in">
+    <span id="dstripText">Delivering to 11211 · about 35 min · $25 minimum</span>
+    <button onclick="clearZip()">Change</button>
+  </div>
+</div>
+
+<div class="note"><strong>Utility bar, second job.</strong> The ticker was atmosphere. Now the left slot carries live status — the one thing on this page that must be true right now. It's the first question a takeout customer has and it costs a customer nothing to read. The bar retracts on scroll; the header does not.</div>
+
+<section class="hero">
+  <div class="eyebrow">754 Metropolitan Ave, Brooklyn · since 2019</div>
+  <h1 id="heroLine">The egg sandwich is on until eleven.</h1>
+  <p class="sub" id="heroSub">Hand-sliced smoked fish, bagels baked down the block, and a counter that has been doing this the same way for long enough to know better. Pick it up, have it brought over, or send it anywhere in the country.</p>
+</section>
+
+<div class="note"><strong>Hero follows the clock.</strong> Before 11 the headline is the egg sandwich, because that's what someone reaching for their phone at 8:40 is deciding about. After 11 it's the fish. One line of copy, swapped on a schedule — no personalization engine required.</div>
+
+<div class="note"><strong>Three doors, not a splash screen.</strong> An interstitial that asks "pickup or shipping?" before the page loads bleeds conversion and reads like a form. These sit under the hero instead: same three doors for everyone, reordered by where you are. Nothing is hidden — the Brooklyn expat in Denver still finds the counter.</div>
+
+<section class="doors" id="doors">
+
+  <article class="door lead" id="doorLocal">
+    <div class="door-tag" id="localTag">Closest to you</div>
+    <h2>Order from the counter</h2>
+    <div class="seg">
+      <button id="segPickup" aria-pressed="true" onclick="mode('pickup')">Pickup</button>
+      <button id="segDelivery" aria-pressed="false" onclick="mode('delivery')">Delivery</button>
+    </div>
+    <div class="morning"><b>Until 11am:</b> hot egg sandwiches, on a roll or a bagel. After that the griddle goes off and the slicer takes over.</div>
+    <ul class="qual" id="localQual">
+      <li>Ready in about 15 minutes</li>
+      <li>Sandwiches, deli by the pound, bagels</li>
+      <li>Pay now, walk in, walk out</li>
+    </ul>
+    <div class="zipline" id="zipline" style="display:none">
+      <input id="zip" placeholder="ZIP code" inputmode="numeric" maxlength="5" aria-label="ZIP code">
+      <button onclick="checkZip()">Check</button>
+    </div>
+    <p class="zipmsg" id="zipmsg"></p>
+    <button class="door-cta" id="localCta">See the counter menu</button>
+  </article>
+
+  <article class="door" id="doorShip">
+    <h2>Ship nationwide</h2>
+    <ul class="qual">
+      <li>Packed on ice, ships Tuesday and Wednesday</li>
+      <li>Overnight — arrives the next morning</li>
+      <li>Free over $175</li>
+    </ul>
+    <button class="door-cta ghost" id="shipCta">Shop whole sides &amp; boxes</button>
+  </article>
+
+  <article class="door" id="doorCater">
+    <h2>Catering</h2>
+    <ul class="qual">
+      <li>48 hours notice, 10 people and up</li>
+      <li>Platters priced by headcount, not by tray</li>
+      <li>Pickup or delivered and set up</li>
+    </ul>
+    <button class="door-cta ghost" id="caterCta">Build a platter order</button>
+  </article>
+
+</section>
+
+<div class="note"><strong>Delivery is a parameter, not a fourth door.</strong> The doors answer "which business am I transacting with." Pickup vs. delivery answers "how does it reach me" — smaller question, so it gets a control inside the door rather than a card of its own. The ZIP check fires <em>before</em> anyone builds a cart. Discovering at checkout that you're two blocks outside the zone is how you lose a customer and get a one-star review in the same minute.</div>
+
+<div class="note"><strong>Three visitor states, not two.</strong> In-zone, in-city-but-outside-zone, and out-of-town all want different things. The middle group is the one that gets hurt if you conflate "local" with "deliverable" — they should land on pickup, not on a delivery form that rejects them. Try the Visitor toggle above.</div>
+
+<div class="note"><strong>Catering is a real cart.</strong> Headcount is the input, not tray quantity — nobody thinks in platters, they think in guests. The 48-hour cutoff is enforced at add-to-cart, not at checkout. The thing this needs that the other two doors don't: a per-day capacity ceiling, or the cart will cheerfully accept forty platters for Sunday.</div>
+
+<section class="primer">
+  <div class="primer-in">
+    <h2>Same fish. Three ways to get it.</h2>
+    <p>Eastern Nova is Eastern Nova whether it's on a bagel at nine in the morning, packed on ice to Chicago, or fanned across a platter for twenty. Worth knowing the difference before you pick one.</p>
+    <div class="three">
+      <div>
+        <h3>Nova, lox, gravlax</h3>
+        <p>Three different processes, three different textures. Only one of them is actually cured in salt alone.</p>
+      </div>
+      <div>
+        <h3>Belly, center, tail</h3>
+        <p>Where on the fish your slice comes from does more to the flavor than the smoke does.</p>
+      </div>
+      <div>
+        <h3>Hand-sliced vs. machine</h3>
+        <p>Why we still pay someone to stand there with a long knife, and what you'd taste if we didn't.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="note"><strong>The primer is the floor, not a nav orphan.</strong> It sits under all three doors because it earns the sale in all three. It's also the page most likely to bring in someone who has never heard of you — "nova vs. lox" is a question people type into a search bar every day.</div>
+
+<footer>
+  <div class="ft">
+    <b>Simply Nova</b><br>
+    754 Metropolitan Avenue, Brooklyn, NY 11211<br>
+    <span class="todo">[real phone number — the live site still has a dummy]</span><br>
+    Tue–Sun 7am–4pm · closed Mondays
+  </div>
+</footer>
+
+<nav class="mbar" aria-label="Primary">
+  <div class="mbar-in">
+    <button aria-pressed="true"><i></i>Counter</button>
+    <button aria-pressed="false"><i></i>Ship</button>
+    <button aria-pressed="false"><i></i>Catering</button>
+    <button aria-pressed="false"><i></i>Primer</button>
+    <button aria-pressed="false"><i></i>Cart</button>
+  </div>
+</nav>
+
+<script>
+var state={geo:'zone',am:true,mode:'pickup',zip:null};
+
+function press(btn){
+  var sibs=btn.parentNode.querySelectorAll('button');
+  for(var i=0;i<sibs.length;i++)sibs[i].setAttribute('aria-pressed','false');
+  btn.setAttribute('aria-pressed','true');
+}
+function skin(s,btn){document.body.dataset.skin=s;press(btn);}
+function clock(isAm,btn){state.am=isAm;document.body.classList.toggle('am',isAm);press(btn);render();}
+function geo(g,btn){state.geo=g;press(btn);clearZip();render();}
+
+function mode(m){
+  state.mode=m;
+  document.getElementById('segPickup').setAttribute('aria-pressed',m==='pickup');
+  document.getElementById('segDelivery').setAttribute('aria-pressed',m==='delivery');
+  document.getElementById('zipline').style.display = m==='delivery' && !state.zip ? 'flex' : 'none';
+  if(m==='pickup')clearZip();
+  render();
+}
+function checkZip(){
+  var v=document.getElementById('zip').value.trim();
+  var msg=document.getElementById('zipmsg');
+  var inZone=['11211','11222','11206','11249'].indexOf(v)>-1;
+  msg.className='zipmsg on'+(inZone?'':' bad');
+  if(inZone){
+    state.zip=v;
+    document.getElementById('zipline').style.display='none';
+    msg.className='zipmsg';
+    document.getElementById('dstripText').textContent='Delivering to '+v+' · about 35 min · $25 minimum';
+    document.getElementById('dstrip').classList.add('on');
+  }else if(v.length===5){
+    msg.textContent='We don\u2019t deliver to '+v+' yet. Pickup is 12 minutes from most of Williamsburg \u2014 or we ship anywhere overnight.';
+  }else{
+    msg.textContent='Five digits, please.';
+  }
+  render();
+}
+function clearZip(){
+  state.zip=null;state.mode='pickup';
+  document.getElementById('dstrip').classList.remove('on');
+  document.getElementById('zipmsg').className='zipmsg';
+  document.getElementById('zipline').style.display='none';
+  document.getElementById('segPickup').setAttribute('aria-pressed','true');
+  document.getElementById('segDelivery').setAttribute('aria-pressed','false');
+}
+
+function render(){
+  var local=document.getElementById('doorLocal'),
+      ship=document.getElementById('doorShip'),
+      cater=document.getElementById('doorCater'),
+      doors=document.getElementById('doors');
+
+  [local,ship,cater].forEach(function(d){d.className='door';});
+  var order;
+  if(state.geo==='zone'){order=[local,ship,cater];local.classList.add('lead');
+    document.getElementById('localTag').textContent='Closest to you';
+    document.getElementById('segDelivery').style.display='';}
+  else if(state.geo==='nyc'){order=[local,cater,ship];local.classList.add('lead');
+    document.getElementById('localTag').textContent='12 min from Williamsburg';
+    document.getElementById('segDelivery').style.display='';}
+  else{order=[ship,cater,local];ship.classList.add('lead');local.classList.add('muted');
+    document.getElementById('localTag').textContent='If you\u2019re in Brooklyn';
+    document.getElementById('segDelivery').style.display='none';}
+  order.forEach(function(d){doors.appendChild(d);});
+
+  document.getElementById('heroLine').textContent = state.am
+    ? 'The egg sandwich is on until eleven.'
+    : 'Hand-sliced, because the machine can\u2019t feel the fish.';
+
+  var dot=document.getElementById('dot'),st=document.getElementById('statusText');
+  if(state.am){dot.className='dot';st.textContent='Open · egg sandwiches until 11 · ordering for pickup';}
+  else{dot.className='dot';st.textContent='Open until 4 · kitchen closes 3:30 · ordering for pickup';}
+
+  var cta=document.getElementById('localCta');
+  cta.textContent = state.mode==='delivery' && state.zip ? 'Start a delivery order' : 'See the counter menu';
+
+  var q=document.getElementById('localQual');
+  q.innerHTML = state.mode==='delivery'
+    ? '<li>About 35 minutes to your door</li><li>$25 minimum, $4 delivery</li><li>Williamsburg, Greenpoint, East Williamsburg</li>'
+    : '<li>Ready in about 15 minutes</li><li>Sandwiches, deli by the pound, bagels</li><li>Pay now, walk in, walk out</li>';
+
+  var mo=(state.mode==='delivery'?'Delivery':'Pickup');
+  document.getElementById('cart').innerHTML='<em>'+mo+'</em> 0';
+}
+
+var lastY=0;
+addEventListener('scroll',function(){
+  var y=scrollY;
+  document.getElementById('util').classList.toggle('retracted', y>60 && y>lastY);
+  lastY=y;
+});
+render();
+</script>
+</body>
+</html>
